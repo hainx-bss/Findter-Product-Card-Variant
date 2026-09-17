@@ -97,6 +97,17 @@
   .seg-icon.square{border-radius:2px;}
   .seg-icon.rounded{border-radius:4px;}
 
+  /* Keep the prototype focused on product decisions, not implementation labels. */
+  .fix-badge,.new-badge,.vset-icon,.drag-handle,.seg-icon{display:none !important;}
+  .notice .ic{display:none;}
+  .vset-head{gap:10px;}
+  .vset-body{padding-left:16px;}
+  .stepper button{border:0;background:none;color:var(--text-faint);font-size:10px;line-height:1;padding:0;cursor:pointer;}
+  .stepper button:hover{color:var(--text);}
+  .save-btn{border:0;font-family:inherit;}
+  .save-status{font-size:12px;color:#0f7a3d;align-self:center;margin-right:12px;}
+  .drop-target{border-color:#111318;background:#fafafa;}
+
   .mapping-head{display:flex;align-items:center;justify-content:space-between;margin:14px 0 8px;}
   .mapping-head .label{font-size:13px;font-weight:600;}
   .mapping-actions{display:flex;gap:14px;}
@@ -200,7 +211,6 @@
 
 <div class="page">
   <h1>Filter &amp; product grid design</h1>
-  <a class="guide" href="#">Customization guidelines here</a>
 
   <div class="tabs">
     <div class="tab">Filter design</div>
@@ -255,7 +265,7 @@
                 <span class="name">Max variant sets shown on card <span class="fix-badge">FIX</span></span>
                 <span class="desc">Sets beyond this limit stay enabled but only appear on the product page</span>
               </div>
-              <div class="stepper"><span>2</span><span class="arrows">▲▼</span></div>
+              <div class="stepper" data-min="1" data-max="3"><button type="button" data-step="down" aria-label="Decrease">▼</button><span>2</span><button type="button" data-step="up" aria-label="Increase">▲</button></div>
             </div>
             <div class="field-row">
               <div class="field-label">
@@ -310,7 +320,7 @@
                   </div>
                   <div class="field-row">
                     <div class="field-label"><span class="name">Max swatches shown</span></div>
-                    <div class="stepper"><span>4</span><span class="arrows">▲▼</span></div>
+                    <div class="stepper" data-min="1" data-max="12"><button type="button" data-step="down" aria-label="Decrease">▼</button><span>4</span><button type="button" data-step="up" aria-label="Increase">▲</button></div>
                   </div>
                   <div class="field-row">
                     <div class="field-label">
@@ -386,7 +396,7 @@
                   </div>
                   <div class="field-row">
                     <div class="field-label"><span class="name">Max options shown</span></div>
-                    <div class="stepper"><span>6</span><span class="arrows">▲▼</span></div>
+                    <div class="stepper" data-min="1" data-max="12"><button type="button" data-step="down" aria-label="Decrease">▼</button><span>6</span><button type="button" data-step="up" aria-label="Increase">▲</button></div>
                   </div>
                   <div class="field-row">
                     <div class="field-label"><span class="name">Out of stock style</span></div>
@@ -482,11 +492,14 @@
   </div>
 
   <div class="save-row">
-    <div class="save-btn">Save</div>
+    <span class="save-status" id="saveStatus" aria-live="polite"></span>
+    <button class="save-btn" id="saveBtn" type="button">Save changes</button>
   </div>
 </div>
 
 <script>
+  const previewFrame = document.getElementById('previewFrame');
+
   function toggleCard(header){
     const body = header.parentElement.querySelector('.card-body');
     const chevron = header.querySelector('.chevron');
@@ -502,21 +515,22 @@
     chev.classList.toggle('rot');
   }
   function setDevice(mode){
-    const frame = document.getElementById('previewFrame');
     const note = document.getElementById('deviceNote');
     document.getElementById('btn-desktop').classList.toggle('active', mode==='desktop');
     document.getElementById('btn-mobile').classList.toggle('active', mode==='mobile');
-    frame.classList.remove('desktop','mobile');
-    frame.classList.add(mode);
+    previewFrame.classList.remove('desktop','mobile');
+    previewFrame.classList.add(mode);
     note.textContent = mode === 'desktop'
       ? 'Desktop view — shows sets up to the configured max, all Quick select sets are clickable.'
       : 'Mobile view — only the first enabled set (Color) is shown on the card to save space; other sets remain available on the product page.';
   }
+
   function updateHoverSource(){
     const val = document.getElementById('hoverSourceSelect').value;
     const map = {
       color: {toggle:'hover-toggle-color', desc:'hover-desc-color', label:'Color'},
-      size: {toggle:'hover-toggle-size', desc:'hover-desc-size', label:'Size'}
+      size: {toggle:'hover-toggle-size', desc:'hover-desc-size', label:'Size'},
+      material: {label:'Material'}
     };
     Object.keys(map).forEach(key => {
       const t = document.getElementById(map[key].toggle);
@@ -529,11 +543,80 @@
       } else {
         t.classList.remove('on');
         t.classList.add('disabled');
-        d.textContent = 'Disabled — ' + map[val] ? map[val].label : '' ;
         d.textContent = 'Disabled — ' + (map[val] ? map[val].label : 'another set') + ' is currently the hover-image source';
       }
     });
   }
+
+  function updatePreview(){
+    const colorToggle = document.querySelector('#set-color > .vset-head .toggle');
+    const sizeToggle = document.querySelector('#set-size > .vset-head .toggle');
+    const colorSet = document.querySelector('.preview-product .pv-set-label');
+    const colorSwatches = colorSet && colorSet.nextElementSibling;
+    const sizeSet = document.querySelector('.set-size-row');
+    if(colorSet) colorSet.style.display = colorToggle && colorToggle.classList.contains('on') ? '' : 'none';
+    if(colorSwatches) colorSwatches.style.display = colorToggle && colorToggle.classList.contains('on') ? '' : 'none';
+    if(sizeSet) sizeSet.style.display = sizeToggle && sizeToggle.classList.contains('on') && !previewFrame.classList.contains('mobile') ? '' : 'none';
+  }
+
+  function setToggle(toggle, enabled){
+    if(toggle.classList.contains('disabled')) return;
+    toggle.classList.toggle('on', enabled === undefined ? !toggle.classList.contains('on') : enabled);
+    updatePreview();
+  }
+
+  document.querySelectorAll('.toggle').forEach(toggle => {
+    toggle.setAttribute('role', 'switch');
+    toggle.setAttribute('aria-checked', toggle.classList.contains('on'));
+    toggle.addEventListener('click', event => {
+      event.stopPropagation();
+      setToggle(toggle);
+      toggle.setAttribute('aria-checked', toggle.classList.contains('on'));
+    });
+  });
+
+  document.querySelectorAll('.segmented').forEach(group => {
+    group.querySelectorAll('.seg').forEach(segment => {
+      segment.setAttribute('role', 'button');
+      segment.addEventListener('click', () => {
+        group.querySelectorAll('.seg').forEach(item => item.classList.remove('active'));
+        segment.classList.add('active');
+      });
+    });
+  });
+
+  document.querySelectorAll('.stepper').forEach(stepper => {
+    stepper.querySelectorAll('button').forEach(button => button.addEventListener('click', () => {
+      const value = stepper.querySelector('span');
+      const current = Number(value.textContent);
+      const min = Number(stepper.dataset.min || 1);
+      const max = Number(stepper.dataset.max || 99);
+      const next = button.dataset.step === 'up' ? current + 1 : current - 1;
+      value.textContent = Math.min(max, Math.max(min, next));
+    }));
+  });
+
+  document.querySelectorAll('.vset').forEach(set => {
+    set.draggable = true;
+    set.addEventListener('dragstart', () => set.classList.add('drop-target'));
+    set.addEventListener('dragend', () => set.classList.remove('drop-target'));
+    set.addEventListener('dragover', event => event.preventDefault());
+    set.addEventListener('drop', event => {
+      event.preventDefault();
+      const list = set.parentElement;
+      const moving = document.querySelector('.drop-target');
+      if(moving && moving !== set) list.insertBefore(moving, set);
+      set.classList.remove('drop-target');
+    });
+  });
+
+  document.getElementById('saveBtn').addEventListener('click', () => {
+    const status = document.getElementById('saveStatus');
+    status.textContent = 'Changes saved';
+    window.setTimeout(() => status.textContent = '', 2200);
+  });
+
+  updatePreview();
 </script>
 
 </body>
