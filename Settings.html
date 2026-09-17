@@ -146,6 +146,7 @@
   .set-size-row .swatch-row.horizontal-scroll,.set-material-row .swatch-row.horizontal-scroll{overflow-x:auto;padding-bottom:4px;}
   .set-size-row .swatch-row.single-line-overflow .text-overflow,.set-material-row .swatch-row.single-line-overflow .text-overflow{display:flex;}
   .set-size-row .swatch-row.horizontal-scroll .text-overflow,.set-material-row .swatch-row.horizontal-scroll .text-overflow{display:none;}
+  .set-size-row .textchip.hidden-overflow,.set-material-row .textchip.hidden-overflow{display:none;}
   .textchip.unavailable,.pswatch.unavailable{opacity:.35;text-decoration:line-through;cursor:not-allowed;}
   .selection-note{font-size:11.5px;color:var(--text-sub);margin-top:8px;min-height:17px;}
   @media (max-width:900px){.layout{grid-template-columns:1fr;}.preview-card{position:static;}.option-row{grid-template-columns:24px minmax(0,1fr) 112px 34px 24px;}}
@@ -305,7 +306,7 @@
         <div class="quick-section-head"><b>Card behavior</b><span>Applies to all options</span></div>
         <div class="quick-field"><label for="quickShape">Swatch shape</label><select id="quickShape"><option selected>Circle</option><option>Square</option><option>Rounded</option></select></div>
         <div class="quick-field"><label for="quickClick">When a customer clicks an option</label><select id="quickClick"><option selected>Update image and link</option><option>Open quick add</option><option>Open product page</option></select></div>
-        <details class="advanced"><summary>Advanced behavior</summary><div class="quick-field"><label for="quickOverflow">When there are more values</label><select id="quickOverflow"><option selected>Show +N more (single line)</option><option>Horizontal scroll</option></select></div><div class="quick-field"><label for="quickStock">Unavailable values</label><select id="quickStock"><option selected>Grey out</option><option>Hide</option><option>Cross out</option></select></div><div class="quick-field"><label for="quickScenario">Preview availability scenario</label><select id="quickScenario"><option selected>All combinations available</option><option>Navy + M unavailable</option><option>Red Wine + S unavailable</option></select></div></details>
+        <details class="advanced"><summary>Advanced behavior</summary><div class="quick-field"><label for="quickOverflow">When there are more values</label><select id="quickOverflow"><option selected>Show +N more (single line)</option><option>Horizontal scroll</option></select></div><div class="quick-field"><label for="quickStock">Unavailable values</label><select id="quickStock"><option selected>Grey out</option><option>Hide</option><option>Cross out</option></select></div></details>
       </div>
     </div>
     <div class="left-col legacy-settings">
@@ -550,6 +551,7 @@
               <span class="new">$49.00</span>
             </p>
 
+            <div class="preview-option-group" data-preview-option="color">
             <div class="pv-set-label">COLOR</div>
             <div class="swatch-row">
               <div class="pswatch image selected" data-color="#1c2b3a" data-image="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=500&q=80" style="background-image:url('https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=80&q=80');" title="Navy"></div>
@@ -562,8 +564,9 @@
               <div class="pswatch overflow">+2</div>
             </div>
             <div class="selection-note" id="selectionNote" aria-live="polite">Select an option to see availability.</div>
+            </div>
 
-            <div class="set-size-row">
+            <div class="set-size-row preview-option-group" data-preview-option="size">
               <div class="pv-set-label">SIZE <span style="font-weight:400;color:var(--text-faint);"></span></div>
               <div class="swatch-row">
                 <div class="textchip display-only" data-size="S">S</div>
@@ -574,7 +577,7 @@
               </div>
             </div>
 
-            <div class="set-material-row" data-preview-option="material">
+            <div class="set-material-row preview-option-group" data-preview-option="material">
               <div class="pv-set-label">MATERIAL</div>
               <div class="swatch-row">
                 <div class="textchip display-only">Cotton</div>
@@ -663,6 +666,7 @@
     const enabledOptions = featureEnabled ? rows.filter(row => row.querySelector('.option-toggle')?.classList.contains('on')) : [];
     const visibleOptions = enabledOptions;
     const isVisible = option => visibleOptions.some(row => row.dataset.option === option);
+    reorderPreviewOptions(enabledOptions);
     if(colorSet) colorSet.style.display = isVisible('color') ? '' : 'none';
     if(colorSwatches) colorSwatches.style.display = isVisible('color') ? '' : 'none';
     if(sizeSet) sizeSet.style.display = isVisible('size') ? '' : 'none';
@@ -670,31 +674,36 @@
     updateAvailability();
   }
 
+  function reorderPreviewOptions(enabledOptions){
+    const info = document.querySelector('.preview-info');
+    const addCart = document.querySelector('.add-cart');
+    if(!info || !addCart) return;
+    enabledOptions.forEach(optionRow => {
+      const group = info.querySelector(`.preview-option-group[data-preview-option="${optionRow.dataset.option}"]`);
+      if(group) info.insertBefore(group, addCart);
+    });
+    info.querySelectorAll('.preview-option-group').forEach(group => {
+      const isEnabled = enabledOptions.some(optionRow => optionRow.dataset.option === group.dataset.previewOption);
+      if(!isEnabled) info.insertBefore(group, addCart);
+    });
+  }
+
   function updateAvailability(){
-    const scenario = document.getElementById('quickScenario')?.value || 'All combinations available';
-    const unavailable = scenario === 'Navy + M unavailable'
-      ? {color:'Navy', size:'M'}
-      : scenario === 'Red Wine + S unavailable'
-        ? {color:'Red Wine', size:'S'}
-        : null;
     const stockStyle = document.getElementById('quickStock')?.value || 'Grey out';
     document.querySelectorAll('.preview-product .pswatch:not(.overflow)').forEach(swatch => {
-      const isUnavailable = unavailable && swatch.title === unavailable.color && selectedSize === unavailable.size;
+      const isUnavailable = false;
       swatch.classList.toggle('unavailable', Boolean(isUnavailable));
       swatch.style.display = isUnavailable && stockStyle === 'Hide' ? 'none' : '';
       swatch.style.textDecoration = isUnavailable && stockStyle === 'Cross out' ? 'line-through' : '';
     });
     document.querySelectorAll('.preview-product .textchip[data-size]').forEach(chip => {
-      const isUnavailable = unavailable && chip.dataset.size === unavailable.size && selectedColor === unavailable.color;
+      const isUnavailable = false;
       chip.classList.toggle('unavailable', Boolean(isUnavailable));
       chip.style.display = isUnavailable && stockStyle === 'Hide' ? 'none' : '';
       chip.style.textDecoration = isUnavailable && stockStyle === 'Cross out' ? 'line-through' : '';
     });
     const note = document.getElementById('selectionNote');
-    const currentCombinationUnavailable = unavailable && selectedColor === unavailable.color && selectedSize === unavailable.size;
-    if(note) note.textContent = currentCombinationUnavailable
-      ? `${unavailable.color} + ${unavailable.size} is unavailable. Choose another option.`
-      : `Selected: ${selectedColor} / ${selectedSize}`;
+    if(note) note.textContent = `Selected: ${selectedColor} / ${selectedSize}`;
   }
 
   function updateDisplayType(){
@@ -731,6 +740,26 @@
     document.querySelectorAll('.preview-product .swatch-row .overflow').forEach(badge => {
       const hiddenCount = badge.parentElement.querySelectorAll('.pswatch.extra').length;
       badge.textContent = `+${hiddenCount}`;
+    });
+    fitTextOverflowRows();
+  }
+
+  function fitTextOverflowRows(){
+    document.querySelectorAll('.set-size-row .swatch-row, .set-material-row .swatch-row').forEach(row => {
+      const values = Array.from(row.querySelectorAll('.textchip:not(.text-overflow)'));
+      const badge = row.querySelector('.text-overflow');
+      if(!badge) return;
+      values.forEach(value => value.classList.remove('hidden-overflow'));
+      badge.style.display = 'none';
+      if(!row.classList.contains('single-line-overflow')) return;
+
+      const hiddenValues = () => values.filter(value => value.classList.contains('hidden-overflow')).length;
+      while(row.scrollWidth > row.clientWidth && values.some(value => !value.classList.contains('hidden-overflow'))){
+        const lastVisible = values.filter(value => !value.classList.contains('hidden-overflow')).pop();
+        lastVisible.classList.add('hidden-overflow');
+        badge.textContent = `+${hiddenValues()}`;
+        badge.style.display = 'flex';
+      }
     });
   }
 
@@ -797,7 +826,6 @@
   document.getElementById('quickOverflow').addEventListener('change', event => {
     updateOverflowMode();
   });
-  document.getElementById('quickScenario').addEventListener('change', updateAvailability);
   document.getElementById('quickStock').addEventListener('change', updateAvailability);
 
   document.getElementById('quickShape').addEventListener('change', updateSwatchShape);
@@ -877,6 +905,7 @@
   updateDisplayType();
   updateSwatchShape();
   updateOverflowMode();
+  window.addEventListener('resize', fitTextOverflowRows);
   updateQuickNote();
   updateAvailability();
 </script>

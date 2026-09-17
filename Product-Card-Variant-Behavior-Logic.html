@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Findter - Product Card Variant Behavior & Logic</title>
+<style>
+  :root{--bg:#f4f5f6;--surface:#fff;--line:#dfe3e7;--text:#1c1f23;--muted:#66707a;--blue:#2459d6;--blue-bg:#eef3ff;--green:#147a45;--green-bg:#eaf7ef;--amber:#8a6412;--amber-bg:#fff7df;--red:#b42318;--red-bg:#fff0ee;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+  .topbar{height:8px;background:#111318}
+  header{background:var(--surface);border-bottom:1px solid var(--line);padding:22px 32px}
+  header h1{font-size:22px;margin:0 0 4px}
+  header p{color:var(--muted);margin:0;max-width:900px}
+  main{max-width:1500px;margin:auto;padding:24px 32px 60px}
+  .summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+  .metric{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 16px}
+  .metric b{display:block;font-size:20px}.metric span{color:var(--muted);font-size:12px}
+  .toolbar{display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+  input,select{border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--text);padding:8px 10px;font:inherit}
+  input{min-width:280px;flex:1}.toolbar select{min-width:170px}
+  .table-wrap{background:var(--surface);border:1px solid var(--line);border-radius:8px;overflow:auto}
+  table{border-collapse:collapse;width:100%;min-width:1450px}
+  th{position:sticky;top:0;background:#f8f9fa;text-align:left;font-size:12px;color:#4d5660;padding:11px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+  td{vertical-align:top;padding:12px;border-bottom:1px solid #edf0f2;font-size:12.5px}
+  tr:last-child td{border-bottom:0} tr:hover td{background:#fbfcff}
+  .id{color:var(--muted);font-family:ui-monospace,monospace;white-space:nowrap}
+  .tag{display:inline-block;border-radius:999px;padding:3px 8px;font-size:11px;font-weight:600;white-space:nowrap}
+  .admin{background:var(--blue-bg);color:var(--blue)}.store{background:var(--green-bg);color:var(--green)}.logic{background:#f1efff;color:#5b45a8}.edge{background:var(--red-bg);color:var(--red)}.validation{background:var(--amber-bg);color:var(--amber)}
+  .impact{font-weight:600}.yes{color:var(--green)}.no{color:var(--muted)}
+  .legend{color:var(--muted);font-size:12px;margin:10px 0 16px}
+  @media(max-width:700px){header{padding:18px 16px}main{padding:16px}.summary{grid-template-columns:repeat(2,1fr)}input{min-width:100%}.table-wrap{border-radius:6px}}
+</style>
+</head>
+<body>
+<div class="topbar"></div>
+<header>
+  <h1>Product Card Variant Options</h1>
+  <p>Behavior, logic, exception and business-rule matrix for Findter. Scope: product cards on Collection and Search Result pages; variant selection remains compatible with PDP and Quick Add.</p>
+</header>
+<main>
+  <div class="summary">
+    <div class="metric"><b>4</b><span>Behavior areas</span></div>
+    <div class="metric"><b>32</b><span>Requirement rows</span></div>
+    <div class="metric"><b>3</b><span>Core option examples</span></div>
+    <div class="metric"><b>9</b><span>Exception and validation rules</span></div>
+  </div>
+  <div class="toolbar">
+    <input id="search" type="search" placeholder="Search feature, rule, action...">
+    <select id="area"><option value="">All areas</option><option>Admin setup</option><option>Option rendering</option><option>Variant resolution</option><option>Availability</option><option>Responsive</option><option>Exception</option><option>Validation</option></select>
+    <select id="surface"><option value="">All surfaces</option><option>Admin UI</option><option>StoreFront UI</option><option>System logic</option></select>
+  </div>
+  <div class="legend">Lọc theo nhóm để dùng bảng như tài liệu thống kê. “Impact core problem” mô tả tác động trực tiếp đến vấn đề: nhiều variant option, option custom, combination không hợp lệ và card bị quá tải.</div>
+  <div class="table-wrap">
+    <table id="requirements">
+      <thead><tr><th>ID</th><th>Area</th><th>Surface</th><th>Feature / control</th><th>User action</th><th>Expected behavior</th><th>Business rule / condition</th><th>Exception / fallback</th><th>Impact core problem</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td class="id">ADM-01</td><td><span class="tag admin">Admin setup</span></td><td><span class="tag admin">Admin UI</span></td><td>Enable variant options</td><td>Bật hoặc tắt toggle.</td><td>Bật: render các option đã chọn trên product card. Tắt: không render option row nào.</td><td>Feature off là trạng thái mặc định an toàn; không thay đổi variant data của Shopify.</td><td>Nếu product không có variant option, toggle có thể bật nhưng card không render row rỗng.</td><td class="impact">Giảm rủi ro feature làm thay đổi card ngoài ý muốn.</td><td>Must</td></tr>
+        <tr><td class="id">ADM-02</td><td><span class="tag admin">Admin setup</span></td><td><span class="tag admin">Admin UI</span></td><td>Imported option list</td><td>Xem danh sách option được phát hiện.</td><td>Hiển thị các option có thật trong variant data, ví dụ Color, Size, Material, Finish hoặc Pack Size.</td><td>Không cho tạo option thủ công ở màn hình này; source là product option name/id từ Shopify.</td><td>Option đã bị xóa khỏi product chuyển sang “Needs attention” hoặc bị ẩn sau lần sync.</td><td class="impact">Hỗ trợ tên option custom mà không hard-code Color/Size/Material.</td><td>Must</td></tr>
+        <tr><td class="id">ADM-03</td><td><span class="tag admin">Admin setup</span></td><td><span class="tag admin">Admin UI</span></td><td>Enable option row</td><td>Bật/tắt từng option.</td><td>Chỉ option bật mới được đưa vào candidate list để render.</td><td>Mỗi source option là một Variant Set độc lập; trạng thái không làm mất option khỏi Shopify.</td><td>Option không có value hợp lệ sẽ không render dù đang bật.</td><td class="impact">Cho merchant chọn mức độ đơn giản của card.</td><td>Must</td></tr>
+        <tr><td class="id">ADM-04</td><td><span class="tag admin">Admin setup</span></td><td><span class="tag admin">Admin UI</span></td><td>Option priority</td><td>Kéo thả row để đổi thứ tự.</td><td>Thứ tự mới quyết định thứ tự option trên card và thứ tự ưu tiên khi mobile thiếu không gian.</td><td>Priority chỉ áp dụng cho presentation; không đổi Shopify option position.</td><td>Nếu drag không hợp lệ, giữ thứ tự cũ và không mất cấu hình.</td><td class="impact">Giải quyết nhiều option bằng priority thay vì một field Color đặc biệt.</td><td>Must</td></tr>
+        <tr><td class="id">ADM-05</td><td><span class="tag admin">Admin setup</span></td><td><span class="tag admin">Admin UI</span></td><td>Display type</td><td>Chọn Image swatch, Color swatch, Text button, Dropdown hoặc Not shown.</td><td>UI và preview đổi theo display type của từng option.</td><td>Default là suggestion theo dữ liệu; merchant được override. Không suy luận cứng theo tên option.</td><td>Không đủ dữ liệu ảnh/màu thì fallback Text button hoặc value label.</td><td class="impact">Cho phép Finish, Style, Material hoặc option riêng dùng đúng presentation.</td><td>Must</td></tr>
+        <tr><td class="id">ADM-06</td><td><span class="tag admin">Admin setup</span></td><td><span class="tag admin">Admin UI</span></td><td>Swatch shape</td><td>Chọn Circle, Square hoặc Rounded.</td><td>Chỉ swatch đổi shape; Text button/Dropdown không bị ảnh hưởng.</td><td>Shape áp dụng nhất quán cho Color swatch và Image swatch.</td><td>Giá trị không hợp lệ dùng Circle làm fallback.</td><td class="impact">Đáp ứng branding và layout card của từng storefront.</td><td>Should</td></tr>
+        <tr><td class="id">ADM-07</td><td><span class="tag admin">Admin setup</span></td><td><span class="tag admin">Admin UI</span></td><td>Image source</td><td>Chọn option value image, variant featured image hoặc manual image.</td><td>Swatch lấy thumbnail theo source đã chọn; ảnh product chính chỉ đổi khi resolve selection thành công.</td><td>Ưu tiên dữ liệu Shopify có sẵn trước manual fallback.</td><td>Thiếu ảnh: fallback value text; không render thumbnail rỗng.</td><td class="impact">Image swatch dùng được cho Color, Material, Finish và Pattern.</td><td>Must</td></tr>
+        <tr><td class="id">ADM-08</td><td><span class="tag admin">Admin setup</span></td><td><span class="tag admin">Admin UI</span></td><td>Click behavior</td><td>Chọn Update image and link, Open Quick Add hoặc Open PDP.</td><td>Preview và StoreFront thể hiện đúng action khi click value.</td><td>Quick select chỉ được phép nếu app resolve được combination/variant.</td><td>Nếu không resolve được variant, fallback Open PDP.</td><td class="impact">Phân biệt preview/selection nhanh với luồng mua hàng đầy đủ.</td><td>Must</td></tr>
+        <tr><td class="id">ADM-09</td><td><span class="tag admin">Admin setup</span></td><td><span class="tag admin">Admin UI</span></td><td>Overflow mode</td><td>Chọn Show +N more (single line) hoặc Horizontal scroll.</td><td>+N giữ một dòng và gom value thừa; Horizontal scroll giữ toàn bộ value trong vùng cuộn.</td><td>+N phải chừa chỗ cho badge trước khi hiển thị chip; không wrap.</td><td>Nếu một value quá dài, ẩn nguyên chip, không cắt giữa text.</td><td class="impact">Tránh mobile card nhảy dòng hoặc bị phá layout khi có nhiều value.</td><td>Must</td></tr>
+        <tr><td class="id">ADM-10</td><td><span class="tag admin">Admin setup</span></td><td><span class="tag admin">Admin UI</span></td><td>Unavailable handling</td><td>Chọn Grey out, Hide hoặc Cross out.</td><td>Storefront áp dụng style đã chọn cho availability được tính từ variant data thật.</td><td>Availability phải được tính sau khi có selected options hiện tại; admin không nhập combination thủ công.</td><td>Nếu toàn bộ value bị Hide, ẩn cả option row; không render khung rỗng.</td><td class="impact">Ngăn khách chọn combination không tồn tại và giảm confusion.</td><td>Must</td></tr>
+        <tr><td class="id">LOG-01</td><td><span class="tag logic">Option rendering</span></td><td><span class="tag store">StoreFront UI</span></td><td>Import option values</td><td>App sync product variant data.</td><td>Mỗi product card nhận source options, values, variant ids, availability và media mapping.</td><td>Không tạo option mới từ UI; dữ liệu nguồn là Shopify product/variant.</td><td>Data sync lỗi: giữ last known configuration, không render option không có source.</td><td class="impact">Đảm bảo custom option của merchant vẫn được hỗ trợ.</td><td>Must</td></tr>
+        <tr><td class="id">LOG-02</td><td><span class="tag logic">Option rendering</span></td><td><span class="tag store">StoreFront UI</span></td><td>Option row visibility</td><td>Card được render với product.</td><td>Render row theo enabled + source exists + visible value count > 0.</td><td>Không render empty frame.</td><td>Option không match product bị ẩn hoàn toàn.</td><td class="impact">Card sạch khi mỗi product có bộ option khác nhau.</td><td>Must</td></tr>
+        <tr><td class="id">LOG-03</td><td><span class="tag logic">Option rendering</span></td><td><span class="tag store">StoreFront UI</span></td><td>Image swatch rendering</td><td>Khách nhìn hoặc hover swatch.</td><td>Render thumbnail value; selected state rõ ràng; không tự chọn option khác.</td><td>Image swatch là presentation của value, không phải product image chính.</td><td>Không có image: dùng color/text fallback.</td><td class="impact">Tách đúng Image swatch khỏi product media switching.</td><td>Must</td></tr>
+        <tr><td class="id">LOG-04</td><td><span class="tag logic">Option rendering</span></td><td><span class="tag store">StoreFront UI</span></td><td>+N single-line algorithm</td><td>Card có nhiều value.</td><td>Đo width thực tế; render các value vừa chỗ; chừa badge; các value còn lại thành +N.</td><td>Không dùng số lượng cố định cho mọi viewport/card width.</td><td>Value cuối luôn bị ẩn nguyên chip nếu không đủ chỗ.</td><td class="impact">Fix trực tiếp lỗi XL/Wool bị cắt hoặc rơi dòng.</td><td>Must</td></tr>
+        <tr><td class="id">LOG-05</td><td><span class="tag logic">Option rendering</span></td><td><span class="tag store">StoreFront UI</span></td><td>Horizontal scroll rendering</td><td>Khách kéo/swipe vùng option.</td><td>Toàn bộ value nằm trong một row nowrap có overflow-x.</td><td>Không show +N trong mode scroll.</td><td>Scroll container không được làm tăng chiều cao card.</td><td class="impact">Cho phép xem đủ option mà không phá card.</td><td>Should</td></tr>
+        <tr><td class="id">LOG-06</td><td><span class="tag logic">Option rendering</span></td><td><span class="tag logic">System logic</span></td><td>Preview fidelity</td><td>PM thay đổi setting trong mockup.</td><td>Preview phản ánh layout, display type, order và overflow behavior.</td><td>Preview không tạo hoặc nhập availability scenario; availability production luôn lấy từ variant data thật.</td><td>Nếu preview không có dữ liệu variant thật, chỉ hiển thị presentation sample và không được coi là source of truth.</td><td class="impact">Giữ tài liệu và mockup đúng với flow người dùng thật.</td><td>Must</td></tr>
+        <tr><td class="id">VAR-01</td><td><span class="tag logic">Variant resolution</span></td><td><span class="tag logic">System logic</span></td><td>Selected option state</td><td>Khách click value.</td><td>Lưu selected options theo source option id/name, không hard-code color/size.</td><td>Ví dụ: {Finish: Matte, Pack Size: 2 pack}.</td><td>Option value không hợp lệ thì bỏ selection và giữ trạng thái trước.</td><td class="impact">Xử lý được option custom và nhiều option cùng lúc.</td><td>Must</td></tr>
+        <tr><td class="id">VAR-02</td><td><span class="tag logic">Variant resolution</span></td><td><span class="tag store">StoreFront UI</span></td><td>Combination lookup</td><td>Selection thay đổi.</td><td>Tìm variant chứa toàn bộ selected option values.</td><td>Chỉ update image, price, link hoặc quick add khi match variant hợp lệ.</td><td>Không có combination: giữ product card và disable value xung đột.</td><td class="impact">Ngăn đổi ảnh sai variant hoặc add nhầm variant.</td><td>Must</td></tr>
+        <tr><td class="id">VAR-03</td><td><span class="tag logic">Variant resolution</span></td><td><span class="tag store">StoreFront UI</span></td><td>Media and price update</td><td>Combination hợp lệ được chọn.</td><td>Ảnh, price, compare-at price và product link phản ánh variant được chọn.</td><td>Không được chỉ đổi swatch thumbnail mà bỏ qua product state.</td><td>Thiếu media: dùng product featured image.</td><td class="impact">Giữ thông tin card nhất quán với variant thực tế.</td><td>Must</td></tr>
+        <tr><td class="id">VAR-04</td><td><span class="tag logic">Variant resolution</span></td><td><span class="tag store">StoreFront UI</span></td><td>Selection order</td><td>Khách chọn option theo bất kỳ thứ tự nào.</td><td>Các value của option khác được cập nhật available/unavailable theo selection hiện tại.</td><td>Availability là dynamic, không static theo từng option riêng lẻ.</td><td>Khi selection hiện tại invalid, reset option cuối hoặc yêu cầu chọn lại.</td><td class="impact">Giải quyết case Color + Size và các combination sparse.</td><td>Must</td></tr>
+        <tr><td class="id">AVA-01</td><td><span class="tag store">Availability</span></td><td><span class="tag store">StoreFront UI</span></td><td>Unavailable value</td><td>Khách chọn một option value.</td><td>Value xung đột bị grey out, hidden hoặc cross out theo cấu hình.</td><td>System resolve combination từ imported variant data; không phụ thuộc scenario giả trong admin preview.</td><td>Khi selection đổi, availability của option còn lại được tính lại theo combination mới.</td><td class="impact">Tránh dead-end và giảm mis-click.</td><td>Must</td></tr>
+        <tr><td class="id">AVA-02</td><td><span class="tag store">Availability</span></td><td><span class="tag store">StoreFront UI</span></td><td>All values unavailable</td><td>Product không còn value mua được.</td><td>Ẩn cả option row nếu setting là Hide; không hiển thị empty wrapper.</td><td>Áp dụng sau inventory filtering.</td><td>Nếu tất cả product unavailable, giữ sold-out state của card theo theme.</td><td class="impact">Không tạo vùng trống hoặc misleading control.</td><td>Must</td></tr>
+        <tr><td class="id">RES-01</td><td><span class="tag admin">Responsive</span></td><td><span class="tag store">StoreFront UI</span></td><td>Desktop layout</td><td>Khách xem card desktop.</td><td>Render tất cả option enabled; mỗi row không wrap ngoài cấu hình overflow.</td><td>Width được đo theo card thực tế, không theo viewport cố định.</td><td>Card quá hẹp vẫn dùng +N/scroll, không làm vỡ grid.</td><td class="impact">Ổn định product grid nhiều column.</td><td>Must</td></tr>
+        <tr><td class="id">RES-02</td><td><span class="tag admin">Responsive</span></td><td><span class="tag store">StoreFront UI</span></td><td>Mobile layout</td><td>Khách xem card mobile.</td><td>Card co theo container; option row giữ one-line hoặc scroll; không overflow toàn màn hình.</td><td>Không có Mobile maximum riêng; mọi option enabled vẫn được render theo overflow mode.</td><td>Text chip dài dùng +N hoặc scroll, không rơi dòng.</td><td class="impact">Fix card mobile bị breakout và nhảy chiều cao.</td><td>Must</td></tr>
+        <tr><td class="id">VAL-01</td><td><span class="tag validation">Validation</span></td><td><span class="tag admin">Admin UI</span></td><td>Duplicate mapping</td><td>Save cấu hình có cùng source option ở hai set.</td><td>Chặn Save và báo option bị map trùng.</td><td>Một Shopify source option chỉ thuộc một Variant Set.</td><td>Không tự gộp hoặc silently overwrite.</td><td class="impact">Tránh hai renderer cùng điều khiển một option.</td><td>Must</td></tr>
+        <tr><td class="id">VAL-02</td><td><span class="tag validation">Validation</span></td><td><span class="tag admin">Admin UI</span></td><td>Missing source option</td><td>Option đã bị xóa khỏi product.</td><td>Hiển thị Needs attention; không cho render configuration rỗng.</td><td>Sync lại source trước khi Save.</td><td>Fallback tắt set và giữ các set còn hợp lệ.</td><td class="impact">Không để cấu hình stale phá storefront.</td><td>Must</td></tr>
+        <tr><td class="id">VAL-03</td><td><span class="tag validation">Validation</span></td><td><span class="tag admin">Admin UI</span></td><td>Native Shopify swatch warning</td><td>App phát hiện category metafield swatch/native theme swatch.</td><td>Cảnh báo nguy cơ render duplicate two swatch layers.</td><td>Merchant phải confirm ownership hoặc disable một renderer.</td><td>Không tự render đúp nếu compatibility chưa xác định.</td><td class="impact">Tránh duplicate UI và conflict với theme.</td><td>Must</td></tr>
+        <tr><td class="id">VAL-04</td><td><span class="tag validation">Validation</span></td><td><span class="tag admin">Admin UI</span></td><td>Save feedback</td><td>Click Save changes.</td><td>Hiển thị saved state nếu valid; error summary nếu invalid.</td><td>Save chỉ persist configuration, không mutate product variant data.</td><td>Network/API error giữ draft local và cho retry.</td><td class="impact">PM có thể demo rõ trạng thái thành công/thất bại.</td><td>Must</td></tr>
+        <tr><td class="id">EXC-01</td><td><span class="tag edge">Exception</span></td><td><span class="tag store">StoreFront UI</span></td><td>Product has no matching option</td><td>Card product không có option đã bật.</td><td>Ẩn set đó hoàn toàn trên riêng product card.</td><td>Không render label, chip hoặc empty spacing.</td><td>Các set match khác vẫn render bình thường.</td><td class="impact">Một cấu hình dùng được cho product catalog không đồng nhất.</td><td>Must</td></tr>
+        <tr><td class="id">EXC-02</td><td><span class="tag edge">Exception</span></td><td><span class="tag store">StoreFront UI</span></td><td>More than three options</td><td>Product có hơn 3 option.</td><td>Render theo priority và overflow; không giới hạn data model ở 3 option.</td><td>Chỉ nên khuyến nghị tối đa số row phù hợp UX, không chặn dữ liệu.</td><td>Hiển thị warning trong admin nếu card quá tải.</td><td class="impact">Hỗ trợ B2B/custom product mà không hard-code giới hạn.</td><td>Should</td></tr>
+        <tr><td class="id">EXC-03</td><td><span class="tag edge">Exception</span></td><td><span class="tag store">StoreFront UI</span></td><td>Legacy/nonstandard option values</td><td>Value dài, emoji, ký tự đặc biệt hoặc duplicate label.</td><td>Escape text, giữ label nguyên nghĩa, dùng +N/scroll.</td><td>Không dùng label làm unique key; dùng option value id/variant id.</td><td>Duplicate display label vẫn phải resolve đúng value id.</td><td class="impact">Tăng độ bền với dữ liệu merchant thực tế.</td><td>Should</td></tr>
+        <tr><td class="id">EXC-04</td><td><span class="tag edge">Exception</span></td><td><span class="tag store">StoreFront UI</span></td><td>Theme/app compatibility</td><td>Store có theme hoặc filter app khác.</td><td>Không chồng event handler, không render duplicate control.</td><td>Respect theme card contract và namespace DOM/event.</td><td>Fallback to PDP/Quick Add nếu card hook không tương thích.</td><td class="impact">Giảm regression trên nhiều Shopify theme.</td><td>Must</td></tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+<script>
+  const search = document.getElementById('search');
+  const area = document.getElementById('area');
+  const surface = document.getElementById('surface');
+  const rows = Array.from(document.querySelectorAll('#requirements tbody tr'));
+  function filterRows(){
+    const query = search.value.trim().toLowerCase();
+    const areaValue = area.value;
+    const surfaceValue = surface.value;
+    rows.forEach(row => {
+      const text = row.textContent.toLowerCase();
+      const matchesQuery = !query || text.includes(query);
+      const matchesArea = !areaValue || row.children[1].textContent.includes(areaValue);
+      const matchesSurface = !surfaceValue || row.children[2].textContent.includes(surfaceValue);
+      row.hidden = !(matchesQuery && matchesArea && matchesSurface);
+    });
+  }
+  [search, area, surface].forEach(control => control.addEventListener('input', filterRows));
+</script>
+</body>
+</html>
