@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Findter Filter & Search — Variant Sets v2</title>
+<style>
+  :root{
+    --bg:#f3f4f5;
+    --card:#ffffff;
+    --border:#e3e5e8;
+    --text:#1c1f23;
+    --text-sub:#6b7280;
+    --text-faint:#9ca3af;
+    --accent:#111318;
+    --toggle-off:#d6d9de;
+    --toggle-on:#22242a;
+    --link:#2563eb;
+    --sale:#e0432b;
+    --warn-bg:#fff8e6;
+    --warn-border:#f0d488;
+    --warn-text:#8a6a12;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:14px;
+    line-height:1.5;
+  }
+
+  .topbar{height:8px;background:#111318;width:100%;}
+  .header{
+    display:flex;align-items:center;gap:8px;
+    padding:16px 32px;
+    background:var(--card);
+    border-bottom:1px solid var(--border);
+  }
+  .header .logo{
+    width:22px;height:22px;border-radius:5px;
+    background:#e6392b;
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-weight:700;font-size:11px;
+  }
+  .header .title{font-weight:600;font-size:15px;}
+
+  .page{max-width:1180px;margin:0 auto;padding:28px 32px 80px;}
+  .page h1{font-size:20px;margin:0 0 6px;}
+  .page a.guide{color:var(--link);text-decoration:underline;font-size:13px;}
+
+  .tabs{margin:22px 0 18px;display:flex;gap:8px;}
+  .tab{padding:7px 16px;border-radius:8px;font-size:13.5px;font-weight:500;color:var(--text-sub);}
+  .tab.active{background:var(--card);border:1px solid var(--border);color:var(--text);font-weight:600;}
+
+  .layout{display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start;}
+  .left-col{display:flex;flex-direction:column;gap:16px;}
+
+  .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+  .card-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;cursor:pointer;user-select:none;}
+  .card-header h2{font-size:14.5px;margin:0;font-weight:600;}
+  .card-header .chevron{color:var(--text-faint);font-size:13px;transition:transform .15s;}
+  .card-header .chevron.rot{transform:rotate(180deg);}
+  .card-body{padding:0 20px 20px;}
+  .card-body.collapsed{display:none;}
+
+  .field-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-top:1px solid #f0f1f2;gap:16px;}
+  .field-row:first-child{border-top:none;}
+  .field-label{display:flex;flex-direction:column;gap:2px;}
+  .field-label .name{font-size:13.5px;color:var(--text);}
+  .field-label .name b{font-weight:600;}
+  .field-label .desc{font-size:12px;color:var(--text-faint);}
+
+  .toggle{width:34px;height:19px;border-radius:999px;background:var(--toggle-off);position:relative;flex-shrink:0;cursor:pointer;}
+  .toggle.on{background:var(--toggle-on);}
+  .toggle.disabled{opacity:.4;cursor:not-allowed;}
+  .toggle::after{content:"";position:absolute;top:2px;left:2px;width:15px;height:15px;border-radius:50%;background:#fff;transition:left .15s;}
+  .toggle.on::after{left:17px;}
+
+  select, .stepper, .text-input{border:1px solid var(--border);border-radius:7px;padding:7px 10px;font-size:13px;background:#fff;color:var(--text);font-family:inherit;}
+  select{min-width:150px;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b7280' stroke-width='1.4' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;}
+  select:disabled{background-color:#f5f5f6;color:var(--text-faint);cursor:not-allowed;}
+  .stepper{display:flex;align-items:center;gap:8px;width:90px;justify-content:space-between;}
+  .stepper .arrows{display:flex;flex-direction:column;gap:1px;color:var(--text-faint);font-size:9px;}
+
+  .swatch-dot{width:26px;height:26px;border-radius:50%;border:1px solid var(--border);flex-shrink:0;}
+  .hex-input{width:110px;font-family:ui-monospace,monospace;font-size:12.5px;}
+
+  .segmented{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+  .segmented .seg{padding:7px 13px;font-size:12.5px;color:var(--text-sub);border-right:1px solid var(--border);background:#fff;display:flex;align-items:center;gap:6px;cursor:pointer;}
+  .segmented .seg:last-child{border-right:none;}
+  .segmented .seg.active{background:#111318;color:#fff;font-weight:600;}
+  .seg-icon{width:13px;height:13px;display:inline-block;border:1.4px solid currentColor;flex-shrink:0;}
+  .seg-icon.circle{border-radius:50%;}
+  .seg-icon.square{border-radius:2px;}
+  .seg-icon.rounded{border-radius:4px;}
+
+  .mapping-head{display:flex;align-items:center;justify-content:space-between;margin:14px 0 8px;}
+  .mapping-head .label{font-size:13px;font-weight:600;}
+  .mapping-actions{display:flex;gap:14px;}
+  .mapping-actions a{font-size:12.5px;color:var(--link);text-decoration:underline;}
+  .mapping-row{display:flex;align-items:center;gap:10px;border:1px solid var(--border);border-radius:8px;padding:8px 10px;margin-bottom:7px;background:#fff;}
+  .mapping-row .val-name{flex:1;font-size:13px;}
+  .mapping-empty-note{font-size:12px;color:var(--text-faint);margin-top:6px;}
+
+  .help-text{font-size:12px;color:var(--text-faint);margin:2px 0 14px;line-height:1.5;}
+
+  /* ===== Notice / warning boxes ===== */
+  .notice{
+    display:flex;gap:8px;align-items:flex-start;
+    border-radius:8px;padding:10px 12px;margin-top:8px;font-size:12px;line-height:1.5;
+  }
+  .notice.info{background:#f7f8f9;border:1px solid var(--border);color:var(--text-sub);}
+  .notice.warn{background:var(--warn-bg);border:1px solid var(--warn-border);color:var(--warn-text);}
+  .notice .ic{flex-shrink:0;}
+
+  /* ===== Variant Sets ===== */
+  .vset-list{display:flex;flex-direction:column;gap:10px;margin-top:4px;}
+  .vset{border:1px solid var(--border);border-radius:10px;background:#fff;overflow:hidden;}
+  .vset.disabled{opacity:.55;}
+  .vset.hidden-on-card{border-style:dashed;}
+  .vset-head{display:flex;align-items:center;gap:12px;padding:12px 14px;cursor:pointer;user-select:none;}
+  .vset-icon{width:32px;height:32px;border-radius:8px;background:#f2f3f4;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+  .vset-title{flex:1;min-width:0;}
+  .vset-title b{display:block;font-size:13.5px;}
+  .vset-title span{font-size:11.5px;color:var(--text-faint);}
+  .vset-badge{font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:5px;background:#eef2ff;color:#4338ca;flex-shrink:0;white-space:nowrap;}
+  .vset-badge.type-color{background:#fef3e7;color:#b45309;}
+  .vset-badge.type-text{background:#eefbf1;color:#0f7a3d;}
+  .vset-badge.limit{background:#f5f5f6;color:var(--text-faint);}
+  .vset-chevron{color:var(--text-faint);font-size:13px;transition:transform .15s;flex-shrink:0;}
+  .vset-chevron.rot{transform:rotate(180deg);}
+  .vset-body{padding:0 16px 16px 58px;border-top:1px solid #f0f1f2;}
+  .vset-body.collapsed{display:none;}
+
+  .sub-divider{border-top:1px solid #f0f1f2;margin-top:2px;padding-top:14px;}
+
+  .preview-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;position:sticky;top:20px;}
+  .preview-card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+  .preview-card-head h3{font-size:13.5px;margin:0;font-weight:600;}
+  .device-toggle{display:flex;border:1px solid var(--border);border-radius:7px;overflow:hidden;}
+  .device-toggle button{
+    border:none;background:#fff;padding:5px 11px;font-size:12px;color:var(--text-sub);
+    cursor:pointer;font-family:inherit;
+  }
+  .device-toggle button.active{background:#111318;color:#fff;font-weight:600;}
+  .device-toggle button:first-child{border-right:1px solid var(--border);}
+
+  .preview-frame{margin:0 auto;transition:max-width .15s;}
+  .preview-frame.desktop{max-width:100%;}
+  .preview-frame.mobile{max-width:210px;}
+
+  .preview-product{border:1px solid var(--border);border-radius:10px;overflow:hidden;background:#fff;}
+  .preview-img{position:relative;background:#d8d3ca;aspect-ratio:3/3.6;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;}
+  .preview-img img{width:100%;height:100%;object-fit:cover;}
+  .sale-badge{position:absolute;top:10px;left:10px;background:var(--sale);color:#fff;font-size:11px;font-weight:600;padding:3px 8px;border-radius:4px;}
+  .preview-info{padding:12px 4px 14px;}
+  .preview-info .pname{font-weight:600;font-size:13.5px;margin:0 0 2px;}
+  .preview-info .pvendor{color:var(--text-faint);font-size:12px;margin:0 0 8px;}
+  .preview-info .pprice{font-size:13px;}
+  .preview-info .old{color:var(--text-faint);text-decoration:line-through;margin:0 6px;}
+  .preview-info .new{color:var(--sale);font-weight:600;}
+
+  .pv-set-label{font-size:10.5px;color:var(--text-faint);margin:10px 0 4px;font-weight:600;letter-spacing:.2px;}
+  .swatch-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+  .pswatch{width:20px;height:20px;border-radius:50%;border:1.5px solid #fff;box-shadow:0 0 0 1px var(--border);flex-shrink:0;}
+  .pswatch.overflow{
+    background:#e8e9eb;color:#4b4f57;font-size:10.5px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:none;border:1.5px solid #d3d5d9;
+  }
+  .textchip{font-size:11px;font-weight:600;padding:5px 10px;border-radius:6px;border:1.3px solid var(--border);color:var(--text-faint);background:#fafafa;cursor:default;}
+  .textchip.display-only{opacity:.85;}
+  .mobile .swatch-row .pswatch:nth-child(n+5){display:none;}
+  .mobile .set-size-row{display:none;}
+
+  .add-cart{width:100%;margin-top:14px;padding:10px;border:1px solid var(--accent);border-radius:8px;background:#fff;font-size:13px;font-weight:600;text-align:center;}
+
+  .save-row{display:flex;justify-content:flex-end;margin-top:16px;}
+  .save-btn{padding:9px 22px;border-radius:8px;background:#111318;color:#fff;font-size:13px;font-weight:600;cursor:pointer;}
+
+  .new-badge{font-size:10px;font-weight:700;background:#eef2ff;color:#4338ca;padding:2px 7px;border-radius:5px;margin-left:8px;letter-spacing:.2px;}
+  .fix-badge{font-size:10px;font-weight:700;background:#fee9e5;color:#b3401f;padding:2px 7px;border-radius:5px;margin-left:8px;letter-spacing:.2px;}
+
+  @media (max-width:900px){
+    .layout{grid-template-columns:1fr;}
+    .preview-card{position:static;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar"></div>
+<div class="header">
+  <div class="logo">TD</div>
+  <div class="title">Findter Filter &amp; Search</div>
+</div>
+
+<div class="page">
+  <h1>Filter &amp; product grid design</h1>
+  <a class="guide" href="#">Customization guidelines here</a>
+
+  <div class="tabs">
+    <div class="tab">Filter design</div>
+    <div class="tab active">Product grid design</div>
+  </div>
+
+  <div class="layout">
+    <div class="left-col">
+
+      <div class="card">
+        <div class="card-header" onclick="toggleCard(this)">
+          <h2>Product grid (Desktop)</h2>
+          <span class="chevron">›</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header" onclick="toggleCard(this)">
+          <h2>Element order</h2>
+          <span class="chevron">›</span>
+        </div>
+      </div>
+
+      <!-- Product card: main focus -->
+      <div class="card">
+        <div class="card-header" onclick="toggleCard(this)">
+          <h2>Product card</h2>
+          <span class="chevron rot">⌃</span>
+        </div>
+        <div class="card-body">
+          <div class="field-row" style="border-top:none;">
+            <div class="field-label"><span class="name">Enable custom</span></div>
+            <div class="toggle on"></div>
+          </div>
+
+          <div class="sub-divider">
+            <div class="field-row" style="border-top:none;padding-top:2px;padding-bottom:6px;">
+              <div class="field-label">
+                <span class="name"><b>Variant sets</b></span>
+                <span class="desc">Reorder how variant options (Color, Size…) appear on your product card. Each set has its own display settings.</span>
+              </div>
+            </div>
+
+            <div class="notice info">
+              <span class="ic">ⓘ</span>
+              <span>This order and these settings apply to the <b>Product Card only</b> — they don't affect the Variant Picker on the product page.</span>
+            </div>
+
+            <!-- Global limit + hover source controls -->
+            <div class="field-row" style="margin-top:10px;">
+              <div class="field-label">
+                <span class="name">Max variant sets shown on card <span class="fix-badge">FIX</span></span>
+                <span class="desc">Sets beyond this limit stay enabled but only appear on the product page</span>
+              </div>
+              <div class="stepper"><span>2</span><span class="arrows">▲▼</span></div>
+            </div>
+            <div class="field-row">
+              <div class="field-label">
+                <span class="name">Image swap on hover — source set <span class="fix-badge">FIX</span></span>
+                <span class="desc">Only one set can control the hover image swap</span>
+              </div>
+              <select id="hoverSourceSelect" onchange="updateHoverSource()">
+                <option value="color">Color</option>
+                <option value="size">Size</option>
+                <option value="material">Material</option>
+              </select>
+            </div>
+
+            <div class="vset-list">
+
+              <!-- ===== Color set ===== -->
+              <div class="vset" id="set-color">
+                <div class="vset-head" onclick="toggleSet('set-color')">
+                  <span class="drag-handle" style="color:var(--text-faint);font-size:14px;letter-spacing:1px;">⋮⋮</span>
+                  <div class="vset-icon">🎨</div>
+                  <div class="vset-title">
+                    <b>Color</b>
+                    <span>Mapped from product option "Color"</span>
+                  </div>
+                  <span class="vset-badge type-color">Color swatch</span>
+                  <span class="vset-badge limit">Shown on card</span>
+                  <div class="toggle on" onclick="event.stopPropagation()"></div>
+                  <span class="vset-chevron rot" id="chev-set-color">⌄</span>
+                </div>
+                <div class="vset-body" id="body-set-color">
+                  <div class="field-row" style="border-top:none;">
+                    <div class="field-label">
+                      <span class="name">Interaction mode <span class="fix-badge">FIX</span></span>
+                      <span class="desc">Quick select: clickable on card. Display only: view-only, opens PDP.</span>
+                    </div>
+                    <div class="segmented">
+                      <div class="seg active">Quick select</div>
+                      <div class="seg">Display only</div>
+                    </div>
+                  </div>
+                  <div class="field-row">
+                    <div class="field-label"><span class="name">Display type</span></div>
+                    <select><option>Color swatch</option><option>Image swatch</option></select>
+                  </div>
+                  <div class="field-row">
+                    <div class="field-label"><span class="name">Swatch shape</span></div>
+                    <div class="segmented">
+                      <div class="seg active"><span class="seg-icon circle"></span>Circle</div>
+                      <div class="seg"><span class="seg-icon square"></span>Square</div>
+                      <div class="seg"><span class="seg-icon rounded"></span>Rounded</div>
+                    </div>
+                  </div>
+                  <div class="field-row">
+                    <div class="field-label"><span class="name">Max swatches shown</span></div>
+                    <div class="stepper"><span>4</span><span class="arrows">▲▼</span></div>
+                  </div>
+                  <div class="field-row">
+                    <div class="field-label">
+                      <span class="name">Overflow style <span class="fix-badge">FIX</span></span>
+                    </div>
+                    <select><option>+N badge</option><option>Horizontal scroll</option></select>
+                  </div>
+                  <div class="field-row">
+                    <div class="field-label"><span class="name">Out of stock style</span></div>
+                    <select><option>Grey-out</option></select>
+                  </div>
+                  <div class="field-row">
+                    <div class="field-label">
+                      <span class="name">Change image on hover</span>
+                      <span class="desc" id="hover-desc-color">Currently set as the hover-image source</span>
+                    </div>
+                    <div class="toggle on" id="hover-toggle-color"></div>
+                  </div>
+
+                  <div class="mapping-head">
+                    <div class="label">Color mapping</div>
+                    <div class="mapping-actions">
+                      <a href="#">Auto-detect</a>
+                      <a href="#">Bulk upload CSV</a>
+                    </div>
+                  </div>
+                  <div class="mapping-row">
+                    <div class="swatch-dot" style="width:20px;height:20px;background:#1c2b3a;"></div>
+                    <div class="val-name">Navy</div>
+                    <input class="text-input hex-input" value="#1C2B3A" readonly>
+                  </div>
+                  <div class="mapping-row">
+                    <div class="swatch-dot" style="width:20px;height:20px;background:#8a1f1f;"></div>
+                    <div class="val-name">Red Wine</div>
+                    <input class="text-input hex-input" value="#8A1F1F" readonly>
+                  </div>
+                  <div class="mapping-empty-note">+ 4 more values · edit individually or use Bulk upload CSV</div>
+                </div>
+              </div>
+
+              <!-- ===== Size set ===== -->
+              <div class="vset" id="set-size">
+                <div class="vset-head" onclick="toggleSet('set-size')">
+                  <span class="drag-handle" style="color:var(--text-faint);font-size:14px;letter-spacing:1px;">⋮⋮</span>
+                  <div class="vset-icon">📏</div>
+                  <div class="vset-title">
+                    <b>Size</b>
+                    <span>Mapped from product option "Size"</span>
+                  </div>
+                  <span class="vset-badge type-text">Text button</span>
+                  <span class="vset-badge limit">Shown on card</span>
+                  <div class="toggle on" onclick="event.stopPropagation()"></div>
+                  <span class="vset-chevron" id="chev-set-size">⌄</span>
+                </div>
+                <div class="vset-body collapsed" id="body-set-size">
+                  <div class="field-row" style="border-top:none;">
+                    <div class="field-label">
+                      <span class="name">Interaction mode <span class="fix-badge">FIX</span></span>
+                      <span class="desc">Quick select: clickable on card. Display only: view-only, opens PDP.</span>
+                    </div>
+                    <div class="segmented">
+                      <div class="seg">Quick select</div>
+                      <div class="seg active">Display only</div>
+                    </div>
+                  </div>
+                  <div class="notice warn">
+                    <span class="ic">⚠</span>
+                    <span>Size is a non-visual option. We recommend <b>Display only</b> to reduce accidental size selections on the listing page. Switching to Quick select may increase mis-clicks.</span>
+                  </div>
+                  <div class="field-row">
+                    <div class="field-label"><span class="name">Display type</span></div>
+                    <select><option>Text button</option><option>Dropdown</option></select>
+                  </div>
+                  <div class="field-row">
+                    <div class="field-label"><span class="name">Max options shown</span></div>
+                    <div class="stepper"><span>6</span><span class="arrows">▲▼</span></div>
+                  </div>
+                  <div class="field-row">
+                    <div class="field-label"><span class="name">Out of stock style</span></div>
+                    <select><option>Cross-out</option></select>
+                  </div>
+                  <div class="field-row">
+                    <div class="field-label">
+                      <span class="name">Change image on hover</span>
+                      <span class="desc" id="hover-desc-size">Disabled — Color is currently the hover-image source</span>
+                    </div>
+                    <div class="toggle disabled" id="hover-toggle-size"></div>
+                  </div>
+                  <div class="help-text" style="margin-top:2px;">No color mapping needed — text button uses the value name directly (S, M, L…).</div>
+                </div>
+              </div>
+
+              <!-- ===== Material set (disabled) ===== -->
+              <div class="vset disabled" id="set-material">
+                <div class="vset-head" onclick="toggleSet('set-material')">
+                  <span class="drag-handle" style="color:var(--text-faint);font-size:14px;letter-spacing:1px;">⋮⋮</span>
+                  <div class="vset-icon">🧵</div>
+                  <div class="vset-title">
+                    <b>Material</b>
+                    <span>Mapped from product option "Material"</span>
+                  </div>
+                  <span class="vset-badge type-text">Text button</span>
+                  <div class="toggle" onclick="event.stopPropagation()"></div>
+                  <span class="vset-chevron" id="chev-set-material">⌄</span>
+                </div>
+                <div class="vset-body collapsed" id="body-set-material">
+                  <div class="help-text" style="margin-top:10px;">This set is disabled — it won't appear on the product card. Turn on to configure.</div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right: Preview card -->
+    <div class="preview-card">
+      <div class="preview-card-head">
+        <h3>Preview card</h3>
+        <div class="device-toggle">
+          <button class="active" id="btn-desktop" onclick="setDevice('desktop')">Desktop</button>
+          <button id="btn-mobile" onclick="setDevice('mobile')">Mobile</button>
+        </div>
+      </div>
+
+      <div class="preview-frame desktop" id="previewFrame">
+        <div class="preview-product">
+          <div class="preview-img">
+            <span class="sale-badge">Sale</span>
+            <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&q=80" alt="Essential Oversized T-Shirt">
+          </div>
+          <div class="preview-info">
+            <p class="pname">Essential Oversized T-Shirt</p>
+            <p class="pvendor">Nike Sportswear</p>
+            <p class="pprice">
+              <span>$59.00</span>
+              <span class="old">$89.00</span>
+              <span class="new">$49.00</span>
+            </p>
+
+            <div class="pv-set-label">COLOR</div>
+            <div class="swatch-row">
+              <div class="pswatch" style="background:#1c2b3a;"></div>
+              <div class="pswatch" style="background:#8a1f1f;"></div>
+              <div class="pswatch" style="background:#d8d3ca;"></div>
+              <div class="pswatch" style="background:#2c2c2c;"></div>
+              <div class="pswatch overflow">+2</div>
+            </div>
+
+            <div class="set-size-row">
+              <div class="pv-set-label">SIZE <span style="font-weight:400;color:var(--text-faint);">(display only)</span></div>
+              <div class="swatch-row">
+                <div class="textchip display-only">S</div>
+                <div class="textchip display-only">M</div>
+                <div class="textchip display-only">L</div>
+                <div class="textchip display-only">XL</div>
+              </div>
+            </div>
+
+            <div class="add-cart">Add to cart</div>
+          </div>
+        </div>
+      </div>
+      <div class="help-text" style="margin-top:10px;margin-bottom:0;" id="deviceNote">Desktop view — shows sets up to the configured max, all Quick select sets are clickable.</div>
+    </div>
+  </div>
+
+  <div class="save-row">
+    <div class="save-btn">Save</div>
+  </div>
+</div>
+
+<script>
+  function toggleCard(header){
+    const body = header.parentElement.querySelector('.card-body');
+    const chevron = header.querySelector('.chevron');
+    if(!body) return;
+    body.classList.toggle('collapsed');
+    chevron.classList.toggle('rot');
+    chevron.textContent = body.classList.contains('collapsed') ? '›' : '⌃';
+  }
+  function toggleSet(id){
+    const body = document.getElementById('body-' + id);
+    const chev = document.getElementById('chev-' + id);
+    body.classList.toggle('collapsed');
+    chev.classList.toggle('rot');
+  }
+  function setDevice(mode){
+    const frame = document.getElementById('previewFrame');
+    const note = document.getElementById('deviceNote');
+    document.getElementById('btn-desktop').classList.toggle('active', mode==='desktop');
+    document.getElementById('btn-mobile').classList.toggle('active', mode==='mobile');
+    frame.classList.remove('desktop','mobile');
+    frame.classList.add(mode);
+    note.textContent = mode === 'desktop'
+      ? 'Desktop view — shows sets up to the configured max, all Quick select sets are clickable.'
+      : 'Mobile view — only the first enabled set (Color) is shown on the card to save space; other sets remain available on the product page.';
+  }
+  function updateHoverSource(){
+    const val = document.getElementById('hoverSourceSelect').value;
+    const map = {
+      color: {toggle:'hover-toggle-color', desc:'hover-desc-color', label:'Color'},
+      size: {toggle:'hover-toggle-size', desc:'hover-desc-size', label:'Size'}
+    };
+    Object.keys(map).forEach(key => {
+      const t = document.getElementById(map[key].toggle);
+      const d = document.getElementById(map[key].desc);
+      if(!t) return;
+      if(key === val){
+        t.classList.add('on');
+        t.classList.remove('disabled');
+        d.textContent = 'Currently set as the hover-image source';
+      } else {
+        t.classList.remove('on');
+        t.classList.add('disabled');
+        d.textContent = 'Disabled — ' + map[val] ? map[val].label : '' ;
+        d.textContent = 'Disabled — ' + (map[val] ? map[val].label : 'another set') + ' is currently the hover-image source';
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
