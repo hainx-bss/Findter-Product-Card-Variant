@@ -50,7 +50,6 @@
   .page{max-width:1180px;margin:0 auto;padding:28px 32px 80px;}
   .page h1{font-size:20px;margin:0 0 6px;}
   .page a.guide{color:var(--link);text-decoration:underline;font-size:13px;}
-
   .tabs{margin:22px 0 18px;display:flex;gap:8px;}
   .tab{padding:7px 16px;border-radius:8px;font-size:13.5px;font-weight:500;color:var(--text-sub);}
   .tab.active{background:var(--card);border:1px solid var(--border);color:var(--text);font-weight:600;}
@@ -107,6 +106,67 @@
   .save-btn{border:0;font-family:inherit;}
   .save-status{font-size:12px;color:#0f7a3d;align-self:center;margin-right:12px;}
   .drop-target{border-color:#111318;background:#fafafa;}
+  .legacy-settings{display:none !important;}
+  .quick-layout{display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start;}
+  .quick-setup{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;}
+  .quick-setup h2{font-size:15px;margin:0 0 4px;}
+  .quick-setup > .intro{font-size:12px;color:var(--text-sub);margin:0 0 20px;}
+  .quick-section{border-top:1px solid #f0f1f2;padding:16px 0;}
+  .quick-section:first-of-type{border-top:0;padding-top:0;}
+  .quick-section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+  .quick-section-head b{font-size:13.5px;}
+  .quick-section-head span{font-size:12px;color:var(--text-faint);}
+  .option-row{display:grid;grid-template-columns:28px minmax(0,1fr) 132px 34px 24px;gap:10px;align-items:center;padding:10px 0;border-top:1px solid #f0f1f2;}
+  .option-row:first-of-type{border-top:0;}
+  .option-order{color:var(--text-faint);font-size:12px;text-align:center;}
+  .option-name b{display:block;font-size:13px;}
+  .option-name span{font-size:11.5px;color:var(--text-faint);}
+  .option-row select{min-width:0;width:100%;}
+  .option-row .toggle{justify-self:end;}
+  .quick-field{display:grid;grid-template-columns:minmax(0,1fr) 180px;align-items:center;gap:16px;margin-top:10px;}
+  .quick-field label{font-size:13px;}
+  .quick-field select{width:180px;min-width:0;}
+  .advanced{margin-top:12px;border:1px solid var(--border);border-radius:7px;padding:0 0 0 11px;}
+  .advanced summary{padding:10px 0;font-size:12.5px;font-weight:600;cursor:pointer;}
+  .advanced .quick-field{padding:0 0 10px;margin-top:0;}
+  .advanced .quick-field select{margin-right:-1px;}
+  .quick-note{background:#f7f8f9;border:1px solid var(--border);border-radius:7px;padding:9px 10px;font-size:12px;color:var(--text-sub);margin-top:12px;}
+  .preview-product .swatch-row.horizontal-scroll{flex-wrap:nowrap;overflow-x:auto;max-width:100%;padding-bottom:4px;}
+  .preview-product .swatch-row.horizontal-scroll .pswatch.extra{display:block;}
+  .preview-product .swatch-row.horizontal-scroll .overflow{display:none;}
+  .preview-product .swatch-row.single-line-overflow{flex-wrap:nowrap;overflow:hidden;max-width:100%;padding-bottom:0;}
+  .preview-product .swatch-row.single-line-overflow .pswatch.extra{display:none;}
+  .preview-product .swatch-row.single-line-overflow .overflow{display:flex !important;flex-shrink:0;}
+  .pswatch.extra{display:none;}
+  .textchip{cursor:pointer;}
+  .set-size-row .swatch-row,.set-material-row .swatch-row{flex-wrap:nowrap;max-width:100%;padding-bottom:0;}
+  .set-size-row .textchip,.set-material-row .textchip{flex:0 0 auto;white-space:nowrap;}
+  .text-overflow{display:flex;flex-shrink:0;}
+  .set-size-row .swatch-row.single-line-overflow,.set-material-row .swatch-row.single-line-overflow{overflow:hidden;}
+  .set-size-row .swatch-row.horizontal-scroll,.set-material-row .swatch-row.horizontal-scroll{overflow-x:auto;padding-bottom:4px;}
+  .set-size-row .swatch-row.single-line-overflow .text-overflow,.set-material-row .swatch-row.single-line-overflow .text-overflow{display:flex;}
+  .set-size-row .swatch-row.horizontal-scroll .text-overflow,.set-material-row .swatch-row.horizontal-scroll .text-overflow{display:none;}
+  .textchip.unavailable,.pswatch.unavailable{opacity:.35;text-decoration:line-through;cursor:not-allowed;}
+  .selection-note{font-size:11.5px;color:var(--text-sub);margin-top:8px;min-height:17px;}
+  @media (max-width:900px){.layout{grid-template-columns:1fr;}.preview-card{position:static;}.option-row{grid-template-columns:24px minmax(0,1fr) 112px 34px 24px;}}
+  @media (max-width:600px){
+    .header{padding:12px 16px;}
+    .page{width:100%;max-width:none;padding:20px 12px 40px;overflow:hidden;}
+    .page h1{font-size:18px;}
+    .tabs{margin:16px 0 14px;overflow-x:auto;white-space:nowrap;}
+    .quick-setup,.preview-card{width:100%;min-width:0;padding:14px;border-radius:8px;}
+    .quick-setup > .intro{margin-bottom:14px;}
+    .quick-section{padding:14px 0;}
+    .quick-section-head{gap:10px;align-items:flex-start;}
+    .quick-section-head span{white-space:nowrap;}
+    .quick-field{grid-template-columns:minmax(0,1fr) minmax(132px,42%);gap:10px;}
+    .quick-field select{width:100%;}
+    .option-row{grid-template-columns:20px minmax(0,1fr) minmax(108px,34%) 34px 20px;gap:6px;padding:9px 0;}
+    .option-name b{font-size:12.5px;}
+    .option-name span{font-size:11px;}
+    .preview-card{margin-top:0;}
+    .preview-frame.mobile{max-width:100%;}
+  }
 
   .mapping-head{display:flex;align-items:center;justify-content:space-between;margin:14px 0 8px;}
   .mapping-head .label{font-size:13px;font-weight:600;}
@@ -177,6 +237,11 @@
   .pv-set-label{font-size:10.5px;color:var(--text-faint);margin:10px 0 4px;font-weight:600;letter-spacing:.2px;}
   .swatch-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
   .pswatch{width:20px;height:20px;border-radius:50%;border:1.5px solid #fff;box-shadow:0 0 0 1px var(--border);flex-shrink:0;}
+  .pswatch.image{border-radius:6px;background-size:cover !important;background-position:center;cursor:pointer;}
+  .pswatch.shape-circle{border-radius:50%;}
+  .pswatch.shape-square{border-radius:2px;}
+  .pswatch.shape-rounded{border-radius:6px;}
+  .pswatch.selected{box-shadow:0 0 0 2px #111318;}
   .pswatch.overflow{
     background:#e8e9eb;color:#4b4f57;font-size:10.5px;font-weight:700;
     display:flex;align-items:center;justify-content:center;
@@ -185,7 +250,8 @@
   .textchip{font-size:11px;font-weight:600;padding:5px 10px;border-radius:6px;border:1.3px solid var(--border);color:var(--text-faint);background:#fafafa;cursor:default;}
   .textchip.display-only{opacity:.85;}
   .mobile .swatch-row .pswatch:nth-child(n+5){display:none;}
-  .mobile .set-size-row{display:none;}
+  .mobile .set-size-row{display:flex;}
+  .mobile .set-material-row{display:flex;}
 
   .add-cart{width:100%;margin-top:14px;padding:10px;border:1px solid var(--accent);border-radius:8px;background:#fff;font-size:13px;font-weight:600;text-align:center;}
 
@@ -218,7 +284,31 @@
   </div>
 
   <div class="layout">
-    <div class="left-col">
+    <div class="quick-setup">
+      <h2>Product card variants</h2>
+      <p class="intro">Options are imported from this product's existing variant data. Choose which ones customers see on the card.</p>
+      <div class="quick-section">
+        <div class="quick-section-head"><b>Show variant options on product cards</b><span>Recommended</span></div>
+        <div class="field-row" style="border-top:0;padding-top:0;">
+          <div class="field-label"><span class="name">Enable variant options</span><span class="desc">Show selectable options below the product price</span></div>
+          <div class="toggle on quick-toggle" id="quickFeatureToggle"></div>
+        </div>
+      </div>
+      <div class="quick-section">
+        <div class="quick-section-head"><b>Options on card</b><span>Imported from product data</span></div>
+        <div class="option-row" data-option="color"><span class="option-order">1</span><div class="option-name"><b>Color</b><span>6 values detected</span></div><select class="option-display"><option selected>Image swatch</option><option>Color swatch</option><option>Text button</option><option>Not shown</option></select><div class="toggle on option-toggle"></div><span></span></div>
+        <div class="option-row" data-option="size"><span class="option-order">2</span><div class="option-name"><b>Size</b><span>6 values detected</span></div><select class="option-display"><option>Image swatch</option><option>Color swatch</option><option>Text button</option><option selected>Not shown</option></select><div class="toggle option-toggle"></div><span></span></div>
+        <div class="option-row" data-option="material"><span class="option-order">3</span><div class="option-name"><b>Material</b><span>3 values detected</span></div><select class="option-display"><option>Image swatch</option><option>Color swatch</option><option>Text button</option><option selected>Not shown</option></select><div class="toggle option-toggle"></div><span></span></div>
+        <div class="quick-note" id="quickNote">Color is shown as an image swatch. Size and Material remain available on the product page.</div>
+      </div>
+      <div class="quick-section">
+        <div class="quick-section-head"><b>Card behavior</b><span>Applies to all options</span></div>
+        <div class="quick-field"><label for="quickShape">Swatch shape</label><select id="quickShape"><option selected>Circle</option><option>Square</option><option>Rounded</option></select></div>
+        <div class="quick-field"><label for="quickClick">When a customer clicks an option</label><select id="quickClick"><option selected>Update image and link</option><option>Open quick add</option><option>Open product page</option></select></div>
+        <details class="advanced"><summary>Advanced behavior</summary><div class="quick-field"><label for="quickOverflow">When there are more values</label><select id="quickOverflow"><option selected>Show +N more (single line)</option><option>Horizontal scroll</option></select></div><div class="quick-field"><label for="quickStock">Unavailable values</label><select id="quickStock"><option selected>Grey out</option><option>Hide</option><option>Cross out</option></select></div><div class="quick-field"><label for="quickScenario">Preview availability scenario</label><select id="quickScenario"><option selected>All combinations available</option><option>Navy + M unavailable</option><option>Red Wine + S unavailable</option></select></div></details>
+      </div>
+    </div>
+    <div class="left-col legacy-settings">
 
       <div class="card">
         <div class="card-header" onclick="toggleCard(this)">
@@ -308,7 +398,18 @@
                   </div>
                   <div class="field-row">
                     <div class="field-label"><span class="name">Display type</span></div>
-                    <select><option>Color swatch</option><option>Image swatch</option></select>
+                    <select id="displayTypeSelect" onchange="updateDisplayType()"><option>Color swatch</option><option selected>Image swatch</option></select>
+                  </div>
+                  <div class="field-row" id="imageSourceRow">
+                    <div class="field-label">
+                      <span class="name">Image source</span>
+                      <span class="desc">Used for the swatch thumbnail; product image updates after selection.</span>
+                    </div>
+                    <select id="imageSourceSelect">
+                      <option>Option value image</option>
+                      <option>Variant featured image</option>
+                      <option>Upload manually</option>
+                    </select>
                   </div>
                   <div class="field-row">
                     <div class="field-label"><span class="name">Swatch shape</span></div>
@@ -332,14 +433,6 @@
                     <div class="field-label"><span class="name">Out of stock style</span></div>
                     <select><option>Grey-out</option></select>
                   </div>
-                  <div class="field-row">
-                    <div class="field-label">
-                      <span class="name">Change image on hover</span>
-                      <span class="desc" id="hover-desc-color">Currently set as the hover-image source</span>
-                    </div>
-                    <div class="toggle on" id="hover-toggle-color"></div>
-                  </div>
-
                   <div class="mapping-head">
                     <div class="label">Color mapping</div>
                     <div class="mapping-actions">
@@ -402,13 +495,6 @@
                     <div class="field-label"><span class="name">Out of stock style</span></div>
                     <select><option>Cross-out</option></select>
                   </div>
-                  <div class="field-row">
-                    <div class="field-label">
-                      <span class="name">Change image on hover</span>
-                      <span class="desc" id="hover-desc-size">Disabled — Color is currently the hover-image source</span>
-                    </div>
-                    <div class="toggle disabled" id="hover-toggle-size"></div>
-                  </div>
                   <div class="help-text" style="margin-top:2px;">No color mapping needed — text button uses the value name directly (S, M, L…).</div>
                 </div>
               </div>
@@ -466,20 +552,35 @@
 
             <div class="pv-set-label">COLOR</div>
             <div class="swatch-row">
-              <div class="pswatch" style="background:#1c2b3a;"></div>
-              <div class="pswatch" style="background:#8a1f1f;"></div>
-              <div class="pswatch" style="background:#d8d3ca;"></div>
-              <div class="pswatch" style="background:#2c2c2c;"></div>
+              <div class="pswatch image selected" data-color="#1c2b3a" data-image="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=500&q=80" style="background-image:url('https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=80&q=80');" title="Navy"></div>
+              <div class="pswatch image" data-color="#8a1f1f" data-image="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=500&q=80" style="background-image:url('https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=80&q=80');" title="Red Wine"></div>
+              <div class="pswatch image" data-color="#d8d3ca" data-image="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=80" style="background-image:url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=80&q=80');" title="Linen"></div>
+              <div class="pswatch image" data-color="#2c2c2c" data-image="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&q=80" style="background-image:url('https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=80&q=80');" title="Black"></div>
+              <div class="pswatch image extra" data-color="#5d4037" data-image="https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=500&q=80" style="background-image:url('https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=80&q=80');" title="Brown"></div>
+              <div class="pswatch image extra" data-color="#7993a8" data-image="https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=500&q=80" style="background-image:url('https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=80&q=80');" title="Sky"></div>
+              <div class="pswatch image extra" data-color="#c7b299" data-image="https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=500&q=80" style="background-image:url('https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=80&q=80');" title="Sand"></div>
               <div class="pswatch overflow">+2</div>
             </div>
+            <div class="selection-note" id="selectionNote" aria-live="polite">Select an option to see availability.</div>
 
             <div class="set-size-row">
-              <div class="pv-set-label">SIZE <span style="font-weight:400;color:var(--text-faint);">(display only)</span></div>
+              <div class="pv-set-label">SIZE <span style="font-weight:400;color:var(--text-faint);"></span></div>
               <div class="swatch-row">
-                <div class="textchip display-only">S</div>
-                <div class="textchip display-only">M</div>
+                <div class="textchip display-only" data-size="S">S</div>
+                <div class="textchip display-only" data-size="M">M</div>
                 <div class="textchip display-only">L</div>
                 <div class="textchip display-only">XL</div>
+                <div class="textchip text-overflow">+2</div>
+              </div>
+            </div>
+
+            <div class="set-material-row" data-preview-option="material">
+              <div class="pv-set-label">MATERIAL</div>
+              <div class="swatch-row">
+                <div class="textchip display-only">Cotton</div>
+                <div class="textchip display-only">Linen</div>
+                <div class="textchip display-only">Wool</div>
+                <div class="textchip text-overflow">+1</div>
               </div>
             </div>
 
@@ -499,6 +600,8 @@
 
 <script>
   const previewFrame = document.getElementById('previewFrame');
+  let selectedColor = 'Navy';
+  let selectedSize = 'S';
 
   function toggleCard(header){
     const body = header.parentElement.querySelector('.card-body');
@@ -521,8 +624,9 @@
     previewFrame.classList.remove('desktop','mobile');
     previewFrame.classList.add(mode);
     note.textContent = mode === 'desktop'
-      ? 'Desktop view — shows sets up to the configured max, all Quick select sets are clickable.'
-      : 'Mobile view — only the first enabled set (Color) is shown on the card to save space; other sets remain available on the product page.';
+      ? 'Desktop view — shows all enabled options.'
+      : 'Mobile view — shows all enabled options in a compact layout.';
+    updatePreview();
   }
 
   function updateHoverSource(){
@@ -549,20 +653,101 @@
   }
 
   function updatePreview(){
-    const colorToggle = document.querySelector('#set-color > .vset-head .toggle');
-    const sizeToggle = document.querySelector('#set-size > .vset-head .toggle');
+    const quickFeature = document.getElementById('quickFeatureToggle');
+    const featureEnabled = quickFeature ? quickFeature.classList.contains('on') : true;
     const colorSet = document.querySelector('.preview-product .pv-set-label');
     const colorSwatches = colorSet && colorSet.nextElementSibling;
     const sizeSet = document.querySelector('.set-size-row');
-    if(colorSet) colorSet.style.display = colorToggle && colorToggle.classList.contains('on') ? '' : 'none';
-    if(colorSwatches) colorSwatches.style.display = colorToggle && colorToggle.classList.contains('on') ? '' : 'none';
-    if(sizeSet) sizeSet.style.display = sizeToggle && sizeToggle.classList.contains('on') && !previewFrame.classList.contains('mobile') ? '' : 'none';
+    const materialSet = document.querySelector('.set-material-row');
+    const rows = Array.from(document.querySelectorAll('.option-row'));
+    const enabledOptions = featureEnabled ? rows.filter(row => row.querySelector('.option-toggle')?.classList.contains('on')) : [];
+    const visibleOptions = enabledOptions;
+    const isVisible = option => visibleOptions.some(row => row.dataset.option === option);
+    if(colorSet) colorSet.style.display = isVisible('color') ? '' : 'none';
+    if(colorSwatches) colorSwatches.style.display = isVisible('color') ? '' : 'none';
+    if(sizeSet) sizeSet.style.display = isVisible('size') ? '' : 'none';
+    if(materialSet) materialSet.style.display = isVisible('material') ? '' : 'none';
+    updateAvailability();
+  }
+
+  function updateAvailability(){
+    const scenario = document.getElementById('quickScenario')?.value || 'All combinations available';
+    const unavailable = scenario === 'Navy + M unavailable'
+      ? {color:'Navy', size:'M'}
+      : scenario === 'Red Wine + S unavailable'
+        ? {color:'Red Wine', size:'S'}
+        : null;
+    const stockStyle = document.getElementById('quickStock')?.value || 'Grey out';
+    document.querySelectorAll('.preview-product .pswatch:not(.overflow)').forEach(swatch => {
+      const isUnavailable = unavailable && swatch.title === unavailable.color && selectedSize === unavailable.size;
+      swatch.classList.toggle('unavailable', Boolean(isUnavailable));
+      swatch.style.display = isUnavailable && stockStyle === 'Hide' ? 'none' : '';
+      swatch.style.textDecoration = isUnavailable && stockStyle === 'Cross out' ? 'line-through' : '';
+    });
+    document.querySelectorAll('.preview-product .textchip[data-size]').forEach(chip => {
+      const isUnavailable = unavailable && chip.dataset.size === unavailable.size && selectedColor === unavailable.color;
+      chip.classList.toggle('unavailable', Boolean(isUnavailable));
+      chip.style.display = isUnavailable && stockStyle === 'Hide' ? 'none' : '';
+      chip.style.textDecoration = isUnavailable && stockStyle === 'Cross out' ? 'line-through' : '';
+    });
+    const note = document.getElementById('selectionNote');
+    const currentCombinationUnavailable = unavailable && selectedColor === unavailable.color && selectedSize === unavailable.size;
+    if(note) note.textContent = currentCombinationUnavailable
+      ? `${unavailable.color} + ${unavailable.size} is unavailable. Choose another option.`
+      : `Selected: ${selectedColor} / ${selectedSize}`;
+  }
+
+  function updateDisplayType(){
+    const displayType = document.getElementById('displayTypeSelect');
+    const sourceRow = document.getElementById('imageSourceRow');
+    const imageMode = displayType && displayType.value === 'Image swatch';
+    if(sourceRow) sourceRow.style.display = imageMode ? '' : 'none';
+    document.querySelectorAll('.preview-product .pswatch:not(.overflow)').forEach(swatch => {
+      swatch.classList.toggle('image', imageMode);
+      if(imageMode){
+        swatch.style.backgroundImage = `url('${swatch.dataset.image}')`;
+        swatch.style.backgroundColor = '';
+      } else {
+        swatch.style.backgroundImage = '';
+        swatch.style.backgroundColor = swatch.dataset.color || '#d8d3ca';
+      }
+    });
+  }
+
+  function updateSwatchShape(){
+    const shape = (document.getElementById('quickShape')?.value || 'Circle').toLowerCase();
+    document.querySelectorAll('.preview-product .pswatch:not(.overflow)').forEach(swatch => {
+      swatch.classList.remove('shape-circle', 'shape-square', 'shape-rounded');
+      swatch.classList.add('shape-' + shape);
+    });
+  }
+
+  function updateOverflowMode(){
+    const horizontal = document.getElementById('quickOverflow')?.value === 'Horizontal scroll';
+    document.querySelectorAll('.preview-product .swatch-row').forEach(row => {
+      row.classList.toggle('horizontal-scroll', horizontal);
+      row.classList.toggle('single-line-overflow', !horizontal);
+    });
+    document.querySelectorAll('.preview-product .swatch-row .overflow').forEach(badge => {
+      const hiddenCount = badge.parentElement.querySelectorAll('.pswatch.extra').length;
+      badge.textContent = `+${hiddenCount}`;
+    });
   }
 
   function setToggle(toggle, enabled){
     if(toggle.classList.contains('disabled')) return;
     toggle.classList.toggle('on', enabled === undefined ? !toggle.classList.contains('on') : enabled);
     updatePreview();
+    updateQuickNote();
+  }
+
+  function updateQuickNote(){
+    const enabled = Array.from(document.querySelectorAll('.option-row')).filter(row => row.querySelector('.option-toggle')?.classList.contains('on'));
+    const names = enabled.map(row => row.querySelector('.option-name b').textContent);
+    const note = document.getElementById('quickNote');
+    if(note) note.textContent = names.length
+      ? `${names.join(' and ')} ${names.length === 1 ? 'is' : 'are'} shown on the product card. Other options remain available on the product page.`
+      : 'No options are shown on the product card. Customers can choose them on the product page.';
   }
 
   document.querySelectorAll('.toggle').forEach(toggle => {
@@ -596,6 +781,78 @@
     }));
   });
 
+  document.querySelectorAll('.option-display').forEach(select => select.addEventListener('change', () => {
+    const row = select.closest('.option-row');
+    const toggle = row.querySelector('.option-toggle');
+    setToggle(toggle, select.value !== 'Not shown');
+    if(row.dataset.option === 'color'){
+      const legacyDisplay = document.getElementById('displayTypeSelect');
+      if(legacyDisplay && select.value !== 'Not shown'){
+        legacyDisplay.value = select.value === 'Image swatch' ? 'Image swatch' : 'Color swatch';
+        updateDisplayType();
+      }
+    }
+  }));
+
+  document.getElementById('quickOverflow').addEventListener('change', event => {
+    updateOverflowMode();
+  });
+  document.getElementById('quickScenario').addEventListener('change', updateAvailability);
+  document.getElementById('quickStock').addEventListener('change', updateAvailability);
+
+  document.getElementById('quickShape').addEventListener('change', updateSwatchShape);
+
+  function refreshOptionOrder(){
+    document.querySelectorAll('.option-row').forEach((row, index) => {
+      row.querySelector('.option-order').textContent = index + 1;
+    });
+  }
+
+  function enableOptionDrag(row){
+    row.draggable = true;
+    row.addEventListener('dragstart', event => {
+      event.dataTransfer.effectAllowed = 'move';
+      event.dataTransfer.setData('text/plain', row.dataset.option);
+      row.classList.add('drop-target');
+    });
+    row.addEventListener('dragend', () => row.classList.remove('drop-target'));
+    row.addEventListener('dragover', event => {
+      event.preventDefault();
+      event.dataTransfer.dropEffect = 'move';
+    });
+    row.addEventListener('drop', event => {
+      event.preventDefault();
+      const moving = document.querySelector(`.option-row[data-option="${event.dataTransfer.getData('text/plain')}"]`);
+      if(moving && moving !== row) row.parentElement.insertBefore(moving, row);
+      row.classList.remove('drop-target');
+      refreshOptionOrder();
+      updatePreview();
+    });
+  }
+
+  document.querySelectorAll('.option-row').forEach(enableOptionDrag);
+
+  document.querySelectorAll('.preview-product .pswatch:not(.overflow)').forEach(swatch => {
+    swatch.dataset.color = swatch.style.backgroundColor;
+    swatch.addEventListener('click', () => {
+      if(swatch.classList.contains('unavailable')) return;
+      document.querySelectorAll('.preview-product .pswatch').forEach(item => item.classList.remove('selected'));
+      swatch.classList.add('selected');
+      selectedColor = swatch.title;
+      const image = document.querySelector('.preview-img img');
+      if(image && swatch.dataset.image) image.src = swatch.dataset.image;
+      updateAvailability();
+    });
+  });
+
+  document.querySelectorAll('.preview-product .textchip[data-size]').forEach(chip => chip.addEventListener('click', () => {
+    if(chip.classList.contains('unavailable')) return;
+    document.querySelectorAll('.textchip[data-size]').forEach(item => item.classList.remove('selected'));
+    chip.classList.add('selected');
+    selectedSize = chip.dataset.size;
+    updateAvailability();
+  }));
+
   document.querySelectorAll('.vset').forEach(set => {
     set.draggable = true;
     set.addEventListener('dragstart', () => set.classList.add('drop-target'));
@@ -617,6 +874,11 @@
   });
 
   updatePreview();
+  updateDisplayType();
+  updateSwatchShape();
+  updateOverflowMode();
+  updateQuickNote();
+  updateAvailability();
 </script>
 
 </body>
