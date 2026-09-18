@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Findter style guide – Filter &amp; Search</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ff:'Inter',-apple-system,BlinkMacSystemFont,'San Francisco','Segoe UI',sans-serif;
+  --bg:rgba(241,241,241,1);--sf:#fff;--sf-hov:rgba(247,247,247,1);--sf-act:rgba(243,243,243,1);
+  --fill:#303030;--fill-hov:#1a1a1a;--fill-t:rgba(0,0,0,.02);
+  --text:rgba(48,48,48,1);--text2:rgba(97,97,97,1);--textd:rgba(181,181,181,1);--lnk:rgba(0,91,211,1);
+  --bdr:rgba(227,227,227,1);--bdr-foc:rgba(0,91,211,1);--crit:rgba(181,38,11,1);
+  --warn-bg:#fff7df;--warn-bdr:#f0d488;--warn-text:#8a6412;
+  --info-bg:#e8f4fe;--info-bdr:rgba(0,91,211,.2);--info-text:#003d9c;
+  --r1:4px;--r2:8px;--r3:12px;
+  --sh1:0px 1px 0px 0px rgba(26,26,26,.07);
+  --sh3:0px 4px 6px -2px rgba(26,26,26,.2);
+  --shbtn:0px -1px 0px 0px #b5b5b5 inset,0px 0px 0px 1px rgba(0,0,0,.1) inset,0px .5px 0px 1.5px #fff inset;
+  --shbtn-hov:0px 1px 0px 0px #ebebeb inset,-1px 0px 0px 0px #ebebeb inset,1px 0px 0px 0px #ebebeb inset,0px -1px 0px 0px #ccc inset;
+  --shbtnp:0px -1px 0px 1px rgba(0,0,0,.8) inset,0px 0px 0px 1px rgba(48,48,48,1) inset,0px .5px 0px 1.5px rgba(255,255,255,.25) inset;
+  --shbtnp-hov:0px 1px 0px 0px rgba(255,255,255,.24) inset,1px 0px 0px 0px rgba(255,255,255,.2) inset,-1px 0px 0px 0px rgba(255,255,255,.2) inset,0px -1px 0px 0px #000 inset;
+}
+html,body{font-family:var(--ff);background:var(--bg);color:var(--text);font-size:13px;line-height:1.5;font-weight:450}
+a{color:var(--lnk)}
+.lay{display:flex;min-height:100vh}
+.sb{width:248px;background:var(--sf);border-right:1px solid var(--bdr);flex-shrink:0;display:flex;flex-direction:column}
+.sb-hd{padding:12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--bdr)}
+.sb-logo{width:28px;height:28px;border-radius:6px;background:var(--fill);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.sb-title{font-size:13px;font-weight:650}
+.sb-nav{padding:8px;display:flex;flex-direction:column;gap:2px}
+.nav-btn{padding:6px 12px;border:0;background:transparent;border-radius:var(--r2);text-align:left;font:450 13px var(--ff);color:var(--text2);cursor:pointer}
+.nav-btn.act{background:var(--sf-act);color:var(--text);font-weight:650}
+.nav-btn[disabled]{color:var(--textd);cursor:not-allowed}
+.main{flex:1;min-width:0}
+.pg{max-width:1100px;margin:0 auto;padding:24px 24px 80px}
+h1{font-size:20px;font-weight:650;line-height:1.3}
+.lead{color:var(--text2);margin:6px 0 20px;max-width:720px}
+.sec{margin:28px 0 12px;font-size:13px;font-weight:650}
+.card{background:var(--sf);border-radius:var(--r2);box-shadow:var(--sh3);padding:16px;margin-bottom:16px}
+.card h3{font-size:13px;font-weight:650;margin-bottom:8px}
+.card p,.rule{color:var(--text2);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.sw{height:56px;border-radius:var(--r2);border:1px solid var(--bdr)}
+.sw-label{font-size:11px;font-weight:550;color:var(--text2);margin-top:6px}
+.k{font-family:ui-monospace,monospace;font-size:11px;background:var(--sf-act);padding:1px 5px;border-radius:var(--r1)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:6px 16px;height:32px;border-radius:var(--r2);font-family:var(--ff);font-size:13px;font-weight:550;cursor:pointer;border:none;white-space:nowrap}
+.btn-p{background:var(--fill);color:#fff;box-shadow:var(--shbtnp)}
+.btn-s{background:var(--sf);color:var(--text);box-shadow:var(--shbtn)}
+.ibtn{width:32px;height:32px;border-radius:var(--r2);border:1px solid var(--bdr);background:var(--sf);box-shadow:var(--sh1);color:var(--text2);cursor:pointer}
+.tgl{position:relative;width:44px;height:24px;border:0;border-radius:12px;background:#ccc;cursor:pointer}
+.tgl.on{background:var(--fill)}
+.tgl-th{position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.tgl.on .tgl-th{transform:translateX(20px)}
+.inp,.sel{border:1px solid var(--bdr);border-radius:var(--r2);padding:7px 12px;font:450 13px var(--ff);background:var(--sf);color:var(--text)}
+.sel{padding-right:32px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid var(--bdr)}
+.row:first-of-type{border-top:0;padding-top:0}
+.flbl{font-weight:550}
+.fhint{font-size:12px;color:var(--text2)}
+.tabs{display:flex;border-bottom:1px solid var(--bdr);gap:4px;margin:8px 0 16px}
+.tab{padding:10px 12px;border:0;background:0;font:450 13px var(--ff);color:var(--text2);border-bottom:2px solid transparent;margin-bottom:-1px;cursor:pointer}
+.tab.act{color:var(--text);font-weight:650;border-bottom-color:var(--fill)}
+.bnr{background:var(--info-bg);border:1px solid var(--info-bdr);color:var(--info-text);border-radius:var(--r2);padding:12px 16px}
+.warn{background:var(--warn-bg);border:1px solid var(--warn-bdr);color:var(--warn-text);border-radius:var(--r2);padding:12px 16px}
+.bdg-n{display:inline-flex;padding:2px 8px;border-radius:var(--r1);font-size:12px;font-weight:550;background:rgba(0,0,0,.07);color:var(--text2)}
+.bdg-f{display:inline-flex;padding:2px 8px;border-radius:var(--r1);font-size:12px;font-weight:550;background:#ddeeff;color:#005bd3}
+.split{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px}
+.preview{background:var(--sf);border-radius:var(--r2);box-shadow:var(--sh3);padding:16px}
+.dt{width:100%;border-collapse:collapse}
+.dt th{background:var(--fill-t);padding:10px 12px;text-align:left;font-size:11px;font-weight:650;text-transform:uppercase;letter-spacing:.06em;color:var(--text2);border-bottom:1px solid var(--bdr)}
+.dt td{padding:12px;border-bottom:1px solid var(--bdr);vertical-align:middle}
+.place{border:1px dashed var(--bdr);border-radius:var(--r2);background:var(--sf-hov);padding:12px;font-size:12px;color:var(--text2)}
+.shell{display:grid;grid-template-columns:56px 160px 1fr;min-height:120px;border:1px solid var(--bdr);border-radius:var(--r2);overflow:hidden;font-size:11px}
+.shell div{padding:8px}
+.shopify{background:#ebebeb;color:#4a4a4a}
+.findter{background:#fff;border-right:1px solid var(--bdr)}
+.content{background:var(--bg)}
+.dont{color:var(--crit);font-weight:550}
+table.ref td,table.ref th{padding:8px 10px;border-bottom:1px solid var(--bdr);text-align:left;vertical-align:top}
+table.ref{width:100%;border-collapse:collapse}
+@media(max-width:900px){.lay{display:block}.sb{width:100%}.split{grid-template-columns:1fr}.shell{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="lay">
+  <aside class="sb">
+    <div class="sb-hd"><div class="sb-logo">Fd</div><span class="sb-title">Findter Filter &amp; Search</span></div>
+    <div class="sb-nav">
+      <button class="nav-btn" disabled>Filter</button>
+      <button class="nav-btn" disabled>Search</button>
+      <button class="nav-btn act">Filter &amp; Product Grid Design</button>
+      <button class="nav-btn" disabled>Settings</button>
+      <a class="nav-btn" href="Settings.html" style="text-decoration:none">Open variant mockup</a>
+    </div>
+  </aside>
+  <main class="main">
+    <div class="pg">
+      <h1>Findter style guide</h1>
+      <p class="lead">Canonical look for Findter Custom Filter &amp; Search mockups. Tokens come from the Polarised Settings work (NgocDungNguyen/Settings). Placement comes from Merged, Filter, Custom Design, and the Shopify admin chrome used in older replicas.</p>
+      <p class="lead">Engineering token dump: <a href="POLARIS_DESIGN_SYSTEM.md">POLARIS_DESIGN_SYSTEM.md</a>. Live mockup: <a href="Settings.html">Settings.html</a>.</p>
+
+      <h2 class="sec">1. What is canonical vs legacy</h2>
+      <div class="card">
+        <table class="ref">
+          <tr><th>Use going forward</th><th>Do not copy into new mockups</th></tr>
+          <tr>
+            <td>Plain HTML + Polar CSS variables. Inter. Inline Polar SVG. White in-app sidebar 248px. Primary <span class="k">#303030</span>. Cards with <span class="k">--sh3</span>, radius 8px.</td>
+            <td>Tailwind + Font Awesome (Merged, Findter_Filter). Shopify green toggle <span class="k">#008060</span>. Blue toggle <span class="k">#2563eb</span> from Custom Design. Red “TD” logo. System-ui 14px cards with 10px radius from the old variant mockup.</td>
+          </tr>
+        </table>
+      </div>
+
+      <h2 class="sec">2. Color tokens</h2>
+      <div class="grid">
+        <div><div class="sw" style="background:var(--bg)"></div><div class="sw-label">Page --bg #f1f1f1</div></div>
+        <div><div class="sw" style="background:var(--sf);border:1px solid var(--bdr)"></div><div class="sw-label">Surface --sf white</div></div>
+        <div><div class="sw" style="background:var(--fill)"></div><div class="sw-label">Fill / primary #303030</div></div>
+        <div><div class="sw" style="background:var(--text)"></div><div class="sw-label">Text #303030</div></div>
+        <div><div class="sw" style="background:var(--text2)"></div><div class="sw-label">Subdued #616161</div></div>
+        <div><div class="sw" style="background:var(--textd)"></div><div class="sw-label">Disabled #b5b5b5</div></div>
+        <div><div class="sw" style="background:var(--lnk)"></div><div class="sw-label">Link / focus #005bd3</div></div>
+        <div><div class="sw" style="background:var(--crit)"></div><div class="sw-label">Critical #b5260b</div></div>
+        <div><div class="sw" style="background:var(--bdr)"></div><div class="sw-label">Border #e3e3e3</div></div>
+      </div>
+      <p class="rule" style="margin-top:10px">Never use blue as the primary button. Blue is links, focus rings, and info banners only.</p>
+
+      <h2 class="sec">3. Type</h2>
+      <div class="card">
+        <p style="font-weight:450;font-size:13px">Body 13 / 450 — nav, paragraphs, table cells</p>
+        <p style="font-weight:550;font-size:13px;margin-top:6px">Label / button 13 / 550</p>
+        <p style="font-weight:650;font-size:13px;margin-top:6px">Card title / active nav 13 / 650</p>
+        <p style="font-weight:650;font-size:20px;margin-top:6px">Page title 20 / 650</p>
+        <p style="font-size:11px;font-weight:650;letter-spacing:.06em;text-transform:uppercase;color:var(--text2);margin-top:8px">Table header 11 / 650 / uppercase</p>
+        <p class="dont" style="margin-top:8px">Do not use 400/500/600 as named Polar weights.</p>
+      </div>
+
+      <h2 class="sec">4. App chrome — placement</h2>
+      <div class="card">
+        <p>Findter lives inside Shopify admin. Mockups usually skip the full Shopify nav and start at the app shell.</p>
+        <div class="shell" style="margin-top:12px">
+          <div class="shopify">Shopify<br>admin<br>260px<br>(optional)</div>
+          <div class="findter">Findter sb<br>248px white<br>logo Fd<br>nav 6/12 pad</div>
+          <div class="content">Main<br>page max 960px centered, 24px padding<br>Config+preview pages may go wider (1100–1180)</div>
+        </div>
+        <p class="fhint" style="margin-top:10px">Sidebar collapsed width = 56px. Active nav = --sf-act, weight 650. Disabled nav = --textd, not clickable.</p>
+        <p class="fhint">Nav order: Filter, Search, Metafield, Year Make Model, Filter &amp; Product Grid Design, Settings, Analytics, Advanced Features.</p>
+      </div>
+
+      <h2 class="sec">5. Page layouts</h2>
+      <div class="card">
+        <h3>A. Settings hub</h3>
+        <p>Title in a white header strip. Body = stack or 3-up hub cards (<span class="k">.sc</span>), 16px pad, --sh3, hover ring. Used on Settings index.</p>
+      </div>
+      <div class="card">
+        <h3>B. Standard settings form (960px)</h3>
+        <p>One column. Cards stacked 16px. Label left / control right on a row. Dividers 1px --bdr. Save primary bottom-right. Source: Translate, Synonyms, Sort by, Metafield.</p>
+        <div class="row"><div><div class="flbl">Setting name</div><div class="fhint">Helper under the name, 12px subdued</div></div><button class="tgl on" type="button"><span class="tgl-th"></span></button></div>
+        <div class="row"><div class="flbl">Select</div><select class="sel" style="width:180px"><option>Check List</option></select></div>
+      </div>
+      <div class="card">
+        <h3>C. Config + live preview (this variant page, Merged, Custom Design)</h3>
+        <p>Left = editor (≥2/3). Right = sticky preview (~300–340px). Collapse to one column under 900px, preview below. Preview never shows drag handles or admin toggles.</p>
+        <div class="split" style="margin-top:12px">
+          <div class="place">LEFT — Filter option / Product card variants<br>fields stacked, 16px section gaps</div>
+          <div class="preview"><strong>Preview</strong><p class="fhint">Storefront facsimile only</p></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>D. Filter option editor (Merged)</h3>
+        <p>Modal-like white panel, max ~4xl. Header: option label + close. Body split. Left: Source, Label, Display type, collapse flags, groups, Remaining Source Values. Right: storefront filter preview. Sticky “Enter StoreFront” is a prototype-only overlay, not product UI.</p>
+      </div>
+      <div class="card">
+        <h3>E. Storefront</h3>
+        <p>Not Polar admin. Keep merchant theme type. Filter panel: option label, values, count on the right, 1px dividers. Product card: media, title, price, then option rows. Overflow stays one line.</p>
+      </div>
+
+      <h2 class="sec">6. Components</h2>
+      <div class="card">
+        <h3>Buttons</h3>
+        <p style="margin:8px 0">Height 32px, radius 8px, pad 6×16, weight 550. Primary uses inset Polar shadow, not a flat black fill.</p>
+        <button class="btn btn-p">Save</button>
+        <button class="btn btn-s">Cancel</button>
+        <button class="ibtn" title="Icon">×</button>
+      </div>
+      <div class="card">
+        <h3>Toggle</h3>
+        <p style="margin:8px 0">44×24 track, 18×18 thumb, 3px inset, on = #303030. Not 34×19, not Shopify green.</p>
+        <button class="tgl on" type="button"><span class="tgl-th"></span></button>
+        <button class="tgl" type="button" style="margin-left:8px"><span class="tgl-th"></span></button>
+      </div>
+      <div class="card">
+        <h3>Tabs</h3>
+        <div class="tabs">
+          <button class="tab">Filter design</button>
+          <button class="tab act">Product grid design</button>
+        </div>
+        <p class="fhint">Underline 2px --fill. No pill tabs unless they are Shopify admin sub-nav already in an older page.</p>
+      </div>
+      <div class="card">
+        <h3>Banners &amp; badges</h3>
+        <div class="bnr">Info banner — #e8f4fe, text #003d9c. Use for “applies to product card only”.</div>
+        <div class="warn" style="margin-top:8px">Warning — duplicate native swatch, needs attention.</div>
+        <p style="margin-top:10px"><span class="bdg-n">Neutral</span> <span class="bdg-f">Filter</span></p>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden">
+        <h3 style="padding:16px 16px 0">Table</h3>
+        <table class="dt">
+          <thead><tr><th>#</th><th>Option</th><th>Display</th><th>Show</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Color</td><td>Image swatch</td><td>On</td></tr>
+            <tr><td>2</td><td>Size</td><td>Text button</td><td>Off</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 class="sec">7. Spacing &amp; radius</h2>
+      <div class="card">
+        <p>Page pad 24px. Card pad 16px. Control gap 8px. Section gap 16px. Radius: badge/checkbox 4px, card/input/button 8px, modal 12px. Focus: <span class="k">0 0 0 3px rgba(0,91,211,.2)</span>.</p>
+      </div>
+
+      <h2 class="sec">8. Icons</h2>
+      <div class="card">
+        <p>16×16 Polar SVG, fill currentColor. No Font Awesome on new pages. Logo mark is <strong>Fd</strong> on #303030, 28×28, radius 6px — not a red TD square.</p>
+      </div>
+
+      <h2 class="sec">9. Sources reviewed</h2>
+      <div class="card">
+        <table class="ref">
+          <tr><th>Repo</th><th>Took from it</th></tr>
+          <tr><td>NgocDungNguyen/Settings</td><td>Canonical Polar tokens, sidebar, buttons, tables, toggles, hub cards</td></tr>
+          <tr><td>Merged / Findter_Filter</td><td>Left config + right storefront preview; filter option field order</td></tr>
+          <tr><td>Findter_Custom_Design</td><td>Grid vs filter columns; sticky preview. Restyle controls to Polar, drop blue toggles</td></tr>
+          <tr><td>Findter_Filter_Search / Advanced-Feature-Tab</td><td>Shopify admin chrome + onboarding homepage 2+1 grid</td></tr>
+          <tr><td>synonyms / DependentFilter / testYMM / Pricing</td><td>Feature patterns only. Pricing teal is marketing, not admin</td></tr>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

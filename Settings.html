@@ -1,63 +1,89 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Findter Filter & Search — Variant Sets v2</title>
+<title>Filter &amp; product grid design – Findter Filter &amp; Search</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#f3f4f5;
-    --card:#ffffff;
-    --border:#e3e5e8;
-    --text:#1c1f23;
-    --text-sub:#6b7280;
-    --text-faint:#9ca3af;
-    --accent:#111318;
-    --toggle-off:#d6d9de;
-    --toggle-on:#22242a;
-    --link:#2563eb;
+    --ff:'Inter',-apple-system,BlinkMacSystemFont,'San Francisco','Segoe UI',sans-serif;
+    --bg:rgba(241,241,241,1);
+    --sf:#fff;
+    --sf-hov:rgba(247,247,247,1);
+    --sf-act:rgba(243,243,243,1);
+    --fill:#303030;
+    --fill-hov:#1a1a1a;
+    --fill-t:rgba(0,0,0,.02);
+    --text:rgba(48,48,48,1);
+    --text2:rgba(97,97,97,1);
+    --textd:rgba(181,181,181,1);
+    --lnk:rgba(0,91,211,1);
+    --bdr:rgba(227,227,227,1);
+    --bdr-foc:rgba(0,91,211,1);
+    --crit:rgba(181,38,11,1);
+    --r1:4px;--r2:8px;--r3:12px;
+    --sh1:0px 1px 0px 0px rgba(26,26,26,.07);
+    --sh3:0px 4px 6px -2px rgba(26,26,26,.2);
+    --shbtn:0px -1px 0px 0px #b5b5b5 inset,0px 0px 0px 1px rgba(0,0,0,.1) inset,0px .5px 0px 1.5px #fff inset;
+    --shbtnp:0px -1px 0px 1px rgba(0,0,0,.8) inset,0px 0px 0px 1px rgba(48,48,48,1) inset,0px .5px 0px 1.5px rgba(255,255,255,.25) inset;
+    --card:#fff;
+    --border:var(--bdr);
+    --text-sub:var(--text2);
+    --text-faint:var(--textd);
+    --accent:var(--fill);
+    --toggle-off:#ccc;
+    --toggle-on:var(--fill);
+    --link:var(--lnk);
     --sale:#e0432b;
-    --warn-bg:#fff8e6;
+    --warn-bg:#fff7df;
     --warn-border:#f0d488;
-    --warn-text:#8a6a12;
-    --radius:10px;
+    --warn-text:#8a6412;
+    --radius:var(--r2);
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
     background:var(--bg);
     color:var(--text);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    font-size:14px;
+    font-family:var(--ff);
+    font-size:13px;
+    font-weight:450;
     line-height:1.5;
+    min-height:100vh;
   }
+  a{color:var(--lnk)}
+  .lay{display:flex;min-height:100vh}
+  .sb{width:248px;background:var(--sf);border-right:1px solid var(--bdr);display:flex;flex-direction:column;flex-shrink:0}
+  .sb-hd{padding:12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--bdr)}
+  .sb-logo{width:28px;height:28px;border-radius:6px;background:var(--fill);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .sb-title{font-size:13px;font-weight:650;flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+  .sb-nav{padding:8px;display:flex;flex-direction:column;gap:2px}
+  .nav-btn{width:100%;border:none;background:transparent;cursor:pointer;padding:6px 12px;border-radius:var(--r2);font-family:var(--ff);font-size:13px;font-weight:450;color:var(--text2);text-align:left}
+  .nav-btn.act{background:var(--sf-act);color:var(--text);font-weight:650}
+  .nav-btn[disabled]{color:var(--textd);cursor:not-allowed}
+  .main{flex:1;min-width:0}
+  .pg-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:20px 24px 16px;background:var(--sf);border-bottom:1px solid var(--bdr)}
+  .pg-ttl{font-size:20px;font-weight:650;margin:0;line-height:1.3}
+  .pg-sub{font-size:13px;color:var(--text2);margin:4px 0 0}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:6px 16px;height:32px;border-radius:var(--r2);font-family:var(--ff);font-size:13px;font-weight:550;cursor:pointer;border:none;white-space:nowrap}
+  .btn-p{background:var(--fill);color:#fff;box-shadow:var(--shbtnp)}
+  .btn-s{background:var(--sf);color:var(--text);box-shadow:var(--shbtn)}
+  .save-status{font-size:12px;color:#006e52;margin-right:10px}
 
-  .topbar{height:8px;background:#111318;width:100%;}
-  .header{
-    display:flex;align-items:center;gap:8px;
-    padding:16px 32px;
-    background:var(--card);
-    border-bottom:1px solid var(--border);
-  }
-  .header .logo{
-    width:22px;height:22px;border-radius:5px;
-    background:#e6392b;
-    display:flex;align-items:center;justify-content:center;
-    color:#fff;font-weight:700;font-size:11px;
-  }
-  .header .title{font-weight:600;font-size:15px;}
-
-  .page{max-width:1180px;margin:0 auto;padding:28px 32px 80px;}
-  .page h1{font-size:20px;margin:0 0 6px;}
+  .page{max-width:1180px;margin:0 auto;padding:20px 24px 80px;}
+  .page h1{font-size:20px;margin:0 0 6px;font-weight:650;}
   .page a.guide{color:var(--link);text-decoration:underline;font-size:13px;}
-  .tabs{margin:22px 0 18px;display:flex;gap:8px;}
-  .tab{padding:7px 16px;border-radius:8px;font-size:13.5px;font-weight:500;color:var(--text-sub);}
-  .tab.active{background:var(--card);border:1px solid var(--border);color:var(--text);font-weight:600;}
+  .tabs{margin:0 0 18px;display:flex;gap:4px;border-bottom:1px solid var(--bdr);padding:0}
+  .tab{padding:10px 12px;border-radius:0;font-size:13px;font-weight:450;color:var(--text-sub);background:transparent;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;cursor:pointer;font-family:var(--ff)}
+  .tab.active{background:transparent;border-bottom-color:var(--fill);color:var(--text);font-weight:650;}
 
   .layout{display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start;}
   .left-col{display:flex;flex-direction:column;gap:16px;}
 
-  .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+  .card{background:var(--card);border:0;box-shadow:var(--sh3);border-radius:var(--radius);overflow:hidden;}
   .card-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;cursor:pointer;user-select:none;}
   .card-header h2{font-size:14.5px;margin:0;font-weight:600;}
   .card-header .chevron{color:var(--text-faint);font-size:13px;transition:transform .15s;}
@@ -72,14 +98,15 @@
   .field-label .name b{font-weight:600;}
   .field-label .desc{font-size:12px;color:var(--text-faint);}
 
-  .toggle{width:34px;height:19px;border-radius:999px;background:var(--toggle-off);position:relative;flex-shrink:0;cursor:pointer;}
+  .toggle{width:44px;height:24px;border-radius:12px;background:var(--toggle-off);position:relative;flex-shrink:0;cursor:pointer;}
   .toggle.on{background:var(--toggle-on);}
   .toggle.disabled{opacity:.4;cursor:not-allowed;}
-  .toggle::after{content:"";position:absolute;top:2px;left:2px;width:15px;height:15px;border-radius:50%;background:#fff;transition:left .15s;}
-  .toggle.on::after{left:17px;}
+  .toggle::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.3);transition:left .2s;}
+  .toggle.on::after{left:23px;}
 
-  select, .stepper, .text-input{border:1px solid var(--border);border-radius:7px;padding:7px 10px;font-size:13px;background:#fff;color:var(--text);font-family:inherit;}
-  select{min-width:150px;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b7280' stroke-width='1.4' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;}
+  select, .stepper, .text-input{border:1px solid var(--border);border-radius:var(--r2);padding:7px 12px;font-size:13px;background:var(--sf);color:var(--text);font-family:inherit;}
+  select{min-width:150px;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%23616161' fill-rule='evenodd' d='M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-size:16px;padding-right:36px;}
+  select:focus,.text-input:focus{outline:none;border-color:var(--bdr-foc);box-shadow:0 0 0 3px rgba(0,91,211,.2);}
   select:disabled{background-color:#f5f5f6;color:var(--text-faint);cursor:not-allowed;}
   .stepper{display:flex;align-items:center;gap:8px;width:90px;justify-content:space-between;}
   .stepper .arrows{display:flex;flex-direction:column;gap:1px;color:var(--text-faint);font-size:9px;}
@@ -108,21 +135,52 @@
   .drop-target{border-color:#111318;background:#fafafa;}
   .legacy-settings{display:none !important;}
   .quick-layout{display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start;}
-  .quick-setup{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;}
-  .quick-setup h2{font-size:15px;margin:0 0 4px;}
-  .quick-setup > .intro{font-size:12px;color:var(--text-sub);margin:0 0 20px;}
+  .quick-setup{background:var(--card);border:0;box-shadow:var(--sh3);border-radius:var(--radius);padding:16px;}
+  .quick-setup h2{font-size:13px;font-weight:650;margin:0 0 4px;}
+  .setup-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:16px;}
+  .setup-head .intro{font-size:12px;color:var(--text-sub);margin:4px 0 0;}
+  .enable-btn{
+    border:0;background:var(--sf);color:var(--text);
+    border-radius:var(--r2);padding:6px 16px;height:32px;font-size:13px;font-weight:550;
+    cursor:pointer;font-family:inherit;flex-shrink:0;box-shadow:var(--shbtn);
+  }
+  .enable-btn.on{background:var(--fill);color:#fff;box-shadow:var(--shbtnp);}
   .quick-section{border-top:1px solid #f0f1f2;padding:16px 0;}
   .quick-section:first-of-type{border-top:0;padding-top:0;}
   .quick-section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
   .quick-section-head b{font-size:13.5px;}
   .quick-section-head span{font-size:12px;color:var(--text-faint);}
-  .option-row{display:grid;grid-template-columns:28px minmax(0,1fr) 132px 34px 24px;gap:10px;align-items:center;padding:10px 0;border-top:1px solid #f0f1f2;}
-  .option-row:first-of-type{border-top:0;}
-  .option-order{color:var(--text-faint);font-size:12px;text-align:center;}
+  .option-table-wrap{border:1px solid var(--border);border-radius:8px;overflow-x:auto;}
+  .option-table{width:100%;min-width:560px;border-collapse:collapse;}
+  .option-table th{
+    text-align:left;font-size:11px;font-weight:650;color:var(--text-sub);
+    background:var(--fill-t);padding:10px 16px;border-bottom:1px solid var(--border);white-space:nowrap;
+    text-transform:uppercase;letter-spacing:.06em;
+  }
+  .option-table td{padding:9px 10px;border-top:1px solid #f0f1f2;vertical-align:middle;}
+  .option-table tbody tr:first-child td{border-top:0;}
+  .option-table tbody tr.drop-target{background:#fafafa;}
+  .option-table .col-order{width:36px;color:var(--text-faint);text-align:center;}
+  .option-table .col-display{width:148px;}
+  .option-table .col-show{width:56px;text-align:center;}
+  .option-table .col-action{width:44px;text-align:right;}
+  .option-table select{min-width:0;width:100%;}
+  .option-table .toggle{margin:0 auto;}
   .option-name b{display:block;font-size:13px;}
   .option-name span{font-size:11.5px;color:var(--text-faint);}
-  .option-row select{min-width:0;width:100%;}
-  .option-row .toggle{justify-self:end;}
+  .icon-btn{
+    border:0;background:none;color:var(--text-faint);cursor:pointer;
+    font-size:18px;line-height:1;padding:4px 6px;font-family:inherit;
+  }
+  .icon-btn:hover{color:#b3401f;}
+  .add-option-row{display:flex;gap:8px;margin-top:10px;align-items:center;}
+  .add-option-row select{flex:1;min-width:0;}
+  .add-btn{
+    border:0;background:var(--sf);border-radius:var(--r2);box-shadow:var(--shbtn);
+    padding:6px 16px;height:32px;font-size:13px;font-weight:550;cursor:pointer;font-family:inherit;white-space:nowrap;
+  }
+  .add-btn:disabled{opacity:.45;cursor:not-allowed;}
+  .add-option-empty{font-size:12px;color:var(--text-faint);margin-top:10px;}
   .quick-field{display:grid;grid-template-columns:minmax(0,1fr) 180px;align-items:center;gap:16px;margin-top:10px;}
   .quick-field label{font-size:13px;}
   .quick-field select{width:180px;min-width:0;}
@@ -139,34 +197,41 @@
   .preview-product .swatch-row.single-line-overflow .overflow{display:flex !important;flex-shrink:0;}
   .pswatch.extra{display:none;}
   .textchip{cursor:pointer;}
-  .set-size-row .swatch-row,.set-material-row .swatch-row{flex-wrap:nowrap;max-width:100%;padding-bottom:0;}
-  .set-size-row .textchip,.set-material-row .textchip{flex:0 0 auto;white-space:nowrap;}
+  .preview-option-group .swatch-row{flex-wrap:nowrap;max-width:100%;padding-bottom:0;}
+  .preview-option-group .textchip{flex:0 0 auto;white-space:nowrap;}
   .text-overflow{display:flex;flex-shrink:0;}
-  .set-size-row .swatch-row.single-line-overflow,.set-material-row .swatch-row.single-line-overflow{overflow:hidden;}
-  .set-size-row .swatch-row.horizontal-scroll,.set-material-row .swatch-row.horizontal-scroll{overflow-x:auto;padding-bottom:4px;}
-  .set-size-row .swatch-row.single-line-overflow .text-overflow,.set-material-row .swatch-row.single-line-overflow .text-overflow{display:flex;}
-  .set-size-row .swatch-row.horizontal-scroll .text-overflow,.set-material-row .swatch-row.horizontal-scroll .text-overflow{display:none;}
-  .set-size-row .textchip.hidden-overflow,.set-material-row .textchip.hidden-overflow{display:none;}
+  .preview-option-group .swatch-row.single-line-overflow{overflow:hidden;}
+  .preview-option-group .swatch-row.horizontal-scroll{overflow-x:auto;padding-bottom:4px;}
+  .preview-option-group .swatch-row.single-line-overflow .text-overflow{display:flex;}
+  .preview-option-group .swatch-row.horizontal-scroll .text-overflow{display:none;}
+  .preview-option-group .textchip.hidden-overflow{display:none;}
   .textchip.unavailable,.pswatch.unavailable{opacity:.35;text-decoration:line-through;cursor:not-allowed;}
   .selection-note{font-size:11.5px;color:var(--text-sub);margin-top:8px;min-height:17px;}
-  @media (max-width:900px){.layout{grid-template-columns:1fr;}.preview-card{position:static;}.option-row{grid-template-columns:24px minmax(0,1fr) 112px 34px 24px;}}
+  @media (max-width:900px){
+    .lay{flex-direction:column}
+    .sb{width:100%;border-right:0;border-bottom:1px solid var(--bdr)}
+    .sb-nav{flex-direction:row;overflow-x:auto}
+    .nav-btn{width:auto;white-space:nowrap}
+    .layout{grid-template-columns:1fr;}
+    .preview-card{position:static;}
+  }
   @media (max-width:600px){
-    .header{padding:12px 16px;}
-    .page{width:100%;max-width:none;padding:20px 12px 40px;overflow:hidden;}
+    .pg-head{padding:16px;flex-wrap:wrap}
+    .page{width:100%;max-width:none;padding:16px 12px 40px;overflow:hidden;}
     .page h1{font-size:18px;}
     .tabs{margin:16px 0 14px;overflow-x:auto;white-space:nowrap;}
     .quick-setup,.preview-card{width:100%;min-width:0;padding:14px;border-radius:8px;}
-    .quick-setup > .intro{margin-bottom:14px;}
+    .setup-head{flex-wrap:wrap;margin-bottom:14px;}
     .quick-section{padding:14px 0;}
     .quick-section-head{gap:10px;align-items:flex-start;}
     .quick-section-head span{white-space:nowrap;}
     .quick-field{grid-template-columns:minmax(0,1fr) minmax(132px,42%);gap:10px;}
     .quick-field select{width:100%;}
-    .option-row{grid-template-columns:20px minmax(0,1fr) minmax(108px,34%) 34px 20px;gap:6px;padding:9px 0;}
+    .option-table{display:block;overflow-x:auto;}
     .option-name b{font-size:12.5px;}
     .option-name span{font-size:11px;}
     .preview-card{margin-top:0;}
-    .preview-frame.mobile{max-width:100%;}
+    .add-option-row{flex-wrap:wrap;}
   }
 
   .mapping-head{display:flex;align-items:center;justify-content:space-between;margin:14px 0 8px;}
@@ -184,7 +249,7 @@
     display:flex;gap:8px;align-items:flex-start;
     border-radius:8px;padding:10px 12px;margin-top:8px;font-size:12px;line-height:1.5;
   }
-  .notice.info{background:#f7f8f9;border:1px solid var(--border);color:var(--text-sub);}
+  .notice.info{background:#e8f4fe;border:1px solid rgba(0,91,211,.2);color:#003d9c;}
   .notice.warn{background:var(--warn-bg);border:1px solid var(--warn-border);color:var(--warn-text);}
   .notice .ic{flex-shrink:0;}
 
@@ -209,20 +274,11 @@
 
   .sub-divider{border-top:1px solid #f0f1f2;margin-top:2px;padding-top:14px;}
 
-  .preview-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;position:sticky;top:20px;}
+  .preview-card{background:var(--card);border:0;box-shadow:var(--sh3);border-radius:var(--radius);padding:16px;position:sticky;top:20px;}
   .preview-card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
   .preview-card-head h3{font-size:13.5px;margin:0;font-weight:600;}
-  .device-toggle{display:flex;border:1px solid var(--border);border-radius:7px;overflow:hidden;}
-  .device-toggle button{
-    border:none;background:#fff;padding:5px 11px;font-size:12px;color:var(--text-sub);
-    cursor:pointer;font-family:inherit;
-  }
-  .device-toggle button.active{background:#111318;color:#fff;font-weight:600;}
-  .device-toggle button:first-child{border-right:1px solid var(--border);}
 
-  .preview-frame{margin:0 auto;transition:max-width .15s;}
-  .preview-frame.desktop{max-width:100%;}
-  .preview-frame.mobile{max-width:210px;}
+  .preview-frame{margin:0 auto;max-width:100%;}
 
   .preview-product{border:1px solid var(--border);border-radius:10px;overflow:hidden;background:#fff;}
   .preview-img{position:relative;background:#d8d3ca;aspect-ratio:3/3.6;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;}
@@ -250,14 +306,12 @@
   }
   .textchip{font-size:11px;font-weight:600;padding:5px 10px;border-radius:6px;border:1.3px solid var(--border);color:var(--text-faint);background:#fafafa;cursor:default;}
   .textchip.display-only{opacity:.85;}
-  .mobile .swatch-row .pswatch:nth-child(n+5){display:none;}
-  .mobile .set-size-row{display:flex;}
-  .mobile .set-material-row{display:flex;}
+  .textchip.selected{border-color:#111318;color:var(--text);background:#fff;}
 
   .add-cart{width:100%;margin-top:14px;padding:10px;border:1px solid var(--accent);border-radius:8px;background:#fff;font-size:13px;font-weight:600;text-align:center;}
 
   .save-row{display:flex;justify-content:flex-end;margin-top:16px;}
-  .save-btn{padding:9px 22px;border-radius:8px;background:#111318;color:#fff;font-size:13px;font-weight:600;cursor:pointer;}
+  .save-btn{padding:6px 16px;height:32px;border-radius:var(--r2);background:var(--fill);color:#fff;font-size:13px;font-weight:550;cursor:pointer;box-shadow:var(--shbtnp);}
 
   .new-badge{font-size:10px;font-weight:700;background:#eef2ff;color:#4338ca;padding:2px 7px;border-radius:5px;margin-left:8px;letter-spacing:.2px;}
   .fix-badge{font-size:10px;font-weight:700;background:#fee9e5;color:#b3401f;padding:2px 7px;border-radius:5px;margin-left:8px;letter-spacing:.2px;}
@@ -269,16 +323,36 @@
 </style>
 </head>
 <body>
-
-<div class="topbar"></div>
-<div class="header">
-  <div class="logo">TD</div>
-  <div class="title">Findter Filter &amp; Search</div>
-</div>
-
+<div class="lay">
+  <aside class="sb" id="sidebar">
+    <div class="sb-hd">
+      <div class="sb-logo">Fd</div>
+      <span class="sb-title">Findter Filter &amp; Search</span>
+    </div>
+    <nav class="sb-nav">
+      <button class="nav-btn" type="button" disabled>Filter</button>
+      <button class="nav-btn" type="button" disabled>Search</button>
+      <button class="nav-btn" type="button" disabled>Metafield</button>
+      <button class="nav-btn" type="button" disabled>Year Make Model</button>
+      <button class="nav-btn act" type="button">Filter &amp; Product Grid Design</button>
+      <button class="nav-btn" type="button" disabled>Settings</button>
+      <button class="nav-btn" type="button" disabled>Analytics</button>
+      <button class="nav-btn" type="button" disabled>Advanced Features</button>
+      <a class="nav-btn" href="Findter-Style-Guide.html" style="text-decoration:none;margin-top:8px">Style guide</a>
+    </nav>
+  </aside>
+  <main class="main">
+    <div class="pg-head">
+      <div>
+        <h1 class="pg-ttl">Filter &amp; product grid design</h1>
+        <p class="pg-sub">Configure how variant options appear on collection and search product cards.</p>
+      </div>
+      <div style="display:flex;align-items:center">
+        <span class="save-status" id="saveStatus" aria-live="polite"></span>
+        <button class="save-btn" id="saveBtn" type="button">Save</button>
+      </div>
+    </div>
 <div class="page">
-  <h1>Filter &amp; product grid design</h1>
-
   <div class="tabs">
     <div class="tab">Filter design</div>
     <div class="tab active">Product grid design</div>
@@ -286,27 +360,52 @@
 
   <div class="layout">
     <div class="quick-setup">
-      <h2>Product card variants</h2>
-      <p class="intro">Options are imported from this product's existing variant data. Choose which ones customers see on the card.</p>
-      <div class="quick-section">
-        <div class="quick-section-head"><b>Show variant options on product cards</b><span>Recommended</span></div>
-        <div class="field-row" style="border-top:0;padding-top:0;">
-          <div class="field-label"><span class="name">Enable variant options</span><span class="desc">Show selectable options below the product price</span></div>
-          <div class="toggle on quick-toggle" id="quickFeatureToggle"></div>
+      <div class="setup-head">
+        <div>
+          <h2>Product card variants</h2>
+          <p class="intro">Turn this on to show variant options on product cards, then choose which options appear.</p>
         </div>
+        <button type="button" class="enable-btn on" id="featureEnableBtn" aria-pressed="true">Enabled</button>
       </div>
-      <div class="quick-section">
-        <div class="quick-section-head"><b>Options on card</b><span>Imported from product data</span></div>
-        <div class="option-row" data-option="color"><span class="option-order">1</span><div class="option-name"><b>Color</b><span>6 values detected</span></div><select class="option-display"><option selected>Image swatch</option><option>Color swatch</option><option>Text button</option><option>Not shown</option></select><div class="toggle on option-toggle"></div><span></span></div>
-        <div class="option-row" data-option="size"><span class="option-order">2</span><div class="option-name"><b>Size</b><span>6 values detected</span></div><select class="option-display"><option>Image swatch</option><option>Color swatch</option><option>Text button</option><option selected>Not shown</option></select><div class="toggle option-toggle"></div><span></span></div>
-        <div class="option-row" data-option="material"><span class="option-order">3</span><div class="option-name"><b>Material</b><span>3 values detected</span></div><select class="option-display"><option>Image swatch</option><option>Color swatch</option><option>Text button</option><option selected>Not shown</option></select><div class="toggle option-toggle"></div><span></span></div>
-        <div class="quick-note" id="quickNote">Color is shown as an image swatch. Size and Material remain available on the product page.</div>
-      </div>
-      <div class="quick-section">
-        <div class="quick-section-head"><b>Card behavior</b><span>Applies to all options</span></div>
-        <div class="quick-field"><label for="quickShape">Swatch shape</label><select id="quickShape"><option selected>Circle</option><option>Square</option><option>Rounded</option></select></div>
-        <div class="quick-field"><label for="quickClick">When a customer clicks an option</label><select id="quickClick"><option selected>Update image and link</option><option>Open quick add</option><option>Open product page</option></select></div>
-        <details class="advanced"><summary>Advanced behavior</summary><div class="quick-field"><label for="quickOverflow">When there are more values</label><select id="quickOverflow"><option selected>Show +N more (single line)</option><option>Horizontal scroll</option></select></div><div class="quick-field"><label for="quickStock">Unavailable values</label><select id="quickStock"><option selected>Grey out</option><option>Hide</option><option>Cross out</option></select></div></details>
+      <div id="variantSettings">
+        <div class="quick-section">
+          <div class="quick-section-head"><b>Enable custom</b><span>Recommended</span></div>
+          <div class="field-row" style="border-top:0;padding-top:0;">
+            <div class="field-label"><span class="name">Customize options on product cards</span><span class="desc">Show selectable options below the product price and pick which variants appear</span></div>
+            <div class="toggle on quick-toggle" id="quickFeatureToggle"></div>
+          </div>
+        </div>
+        <div id="customOptionsWrap">
+          <div class="quick-section">
+            <div class="quick-section-head"><b>Options on card</b><span>Imported from product data</span></div>
+            <div class="option-table-wrap">
+              <table class="option-table">
+                <thead>
+                  <tr>
+                    <th class="col-order">#</th>
+                    <th>Option</th>
+                    <th class="col-display">Display</th>
+                    <th class="col-show">Show</th>
+                    <th class="col-action"></th>
+                  </tr>
+                </thead>
+                <tbody id="optionTableBody"></tbody>
+              </table>
+            </div>
+            <div class="add-option-row" id="addOptionRow">
+              <select id="addOptionSelect" aria-label="Choose a variant to add"></select>
+              <button type="button" class="add-btn" id="addOptionBtn">Add variant</button>
+            </div>
+            <div class="add-option-empty" id="addOptionEmpty" hidden>All available variants are already on the card.</div>
+            <div class="quick-note" id="quickNote"></div>
+          </div>
+          <div class="quick-section">
+            <div class="quick-section-head"><b>Card behavior</b><span>Applies to all options</span></div>
+            <div class="quick-field"><label for="quickShape">Swatch shape</label><select id="quickShape"><option selected>Circle</option><option>Square</option><option>Rounded</option></select></div>
+            <div class="quick-field"><label for="quickClick">When a customer clicks an option</label><select id="quickClick"><option selected>Update image and link</option><option>Open quick add</option><option>Open product page</option></select></div>
+            <details class="advanced"><summary>Advanced behavior</summary><div class="quick-field"><label for="quickOverflow">When there are more values</label><select id="quickOverflow"><option selected>Show +N more (single line)</option><option>Horizontal scroll</option></select></div><div class="quick-field"><label for="quickStock">Unavailable values</label><select id="quickStock"><option selected>Grey out</option><option>Hide</option><option>Cross out</option></select></div></details>
+          </div>
+        </div>
       </div>
     </div>
     <div class="left-col legacy-settings">
@@ -530,13 +629,9 @@
     <div class="preview-card">
       <div class="preview-card-head">
         <h3>Preview card</h3>
-        <div class="device-toggle">
-          <button class="active" id="btn-desktop" onclick="setDevice('desktop')">Desktop</button>
-          <button id="btn-mobile" onclick="setDevice('mobile')">Mobile</button>
-        </div>
       </div>
 
-      <div class="preview-frame desktop" id="previewFrame">
+      <div class="preview-frame" id="previewFrame">
         <div class="preview-product">
           <div class="preview-img">
             <span class="sale-badge">Sale</span>
@@ -551,60 +646,85 @@
               <span class="new">$49.00</span>
             </p>
 
-            <div class="preview-option-group" data-preview-option="color">
-            <div class="pv-set-label">COLOR</div>
-            <div class="swatch-row">
-              <div class="pswatch image selected" data-color="#1c2b3a" data-image="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=500&q=80" style="background-image:url('https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=80&q=80');" title="Navy"></div>
-              <div class="pswatch image" data-color="#8a1f1f" data-image="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=500&q=80" style="background-image:url('https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=80&q=80');" title="Red Wine"></div>
-              <div class="pswatch image" data-color="#d8d3ca" data-image="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=80" style="background-image:url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=80&q=80');" title="Linen"></div>
-              <div class="pswatch image" data-color="#2c2c2c" data-image="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&q=80" style="background-image:url('https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=80&q=80');" title="Black"></div>
-              <div class="pswatch image extra" data-color="#5d4037" data-image="https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=500&q=80" style="background-image:url('https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=80&q=80');" title="Brown"></div>
-              <div class="pswatch image extra" data-color="#7993a8" data-image="https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=500&q=80" style="background-image:url('https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=80&q=80');" title="Sky"></div>
-              <div class="pswatch image extra" data-color="#c7b299" data-image="https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=500&q=80" style="background-image:url('https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=80&q=80');" title="Sand"></div>
-              <div class="pswatch overflow">+2</div>
-            </div>
+            <div id="previewOptions"></div>
             <div class="selection-note" id="selectionNote" aria-live="polite">Select an option to see availability.</div>
-            </div>
-
-            <div class="set-size-row preview-option-group" data-preview-option="size">
-              <div class="pv-set-label">SIZE <span style="font-weight:400;color:var(--text-faint);"></span></div>
-              <div class="swatch-row">
-                <div class="textchip display-only" data-size="S">S</div>
-                <div class="textchip display-only" data-size="M">M</div>
-                <div class="textchip display-only">L</div>
-                <div class="textchip display-only">XL</div>
-                <div class="textchip text-overflow">+2</div>
-              </div>
-            </div>
-
-            <div class="set-material-row preview-option-group" data-preview-option="material">
-              <div class="pv-set-label">MATERIAL</div>
-              <div class="swatch-row">
-                <div class="textchip display-only">Cotton</div>
-                <div class="textchip display-only">Linen</div>
-                <div class="textchip display-only">Wool</div>
-                <div class="textchip text-overflow">+1</div>
-              </div>
-            </div>
-
             <div class="add-cart">Add to cart</div>
           </div>
         </div>
       </div>
-      <div class="help-text" style="margin-top:10px;margin-bottom:0;" id="deviceNote">Desktop view — shows sets up to the configured max, all Quick select sets are clickable.</div>
+      <div class="help-text" style="margin-top:10px;margin-bottom:0;" id="deviceNote">Preview shows the options currently enabled on the product card.</div>
     </div>
   </div>
 
-  <div class="save-row">
-    <span class="save-status" id="saveStatus" aria-live="polite"></span>
-    <button class="save-btn" id="saveBtn" type="button">Save changes</button>
-  </div>
+</div>
+  </main>
 </div>
 
 <script>
-  const previewFrame = document.getElementById('previewFrame');
-  let selectedColor = 'Navy';
-  let selectedSize = 'S';
+  const DISPLAY_OPTIONS = ['Image swatch', 'Color swatch', 'Text button', 'Not shown'];
+  const VARIANT_CATALOG = {
+    color: {
+      name: 'Color',
+      values: [
+        { title: 'Navy', color: '#1c2b3a', image: 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=500&q=80' },
+        { title: 'Red Wine', color: '#8a1f1f', image: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=500&q=80' },
+        { title: 'Linen', color: '#d8d3ca', image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=80' },
+        { title: 'Black', color: '#2c2c2c', image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&q=80' },
+        { title: 'Brown', color: '#5d4037', image: 'https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=500&q=80', extra: true },
+        { title: 'Sky', color: '#7993a8', image: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=500&q=80', extra: true }
+      ]
+    },
+    size: {
+      name: 'Size',
+      values: [
+        { title: 'S' }, { title: 'M' }, { title: 'L' }, { title: 'XL' }, { title: 'XXL', extra: true }, { title: '3XL', extra: true }
+      ]
+    },
+    material: {
+      name: 'Material',
+      values: [{ title: 'Cotton' }, { title: 'Linen' }, { title: 'Wool' }]
+    },
+    style: {
+      name: 'Style',
+      values: [{ title: 'Casual' }, { title: 'Formal' }, { title: 'Sport' }]
+    },
+    finish: {
+      name: 'Finish',
+      values: [{ title: 'Matte' }, { title: 'Gloss' }, { title: 'Satin' }]
+    },
+    pattern: {
+      name: 'Pattern',
+      values: [{ title: 'Solid' }, { title: 'Stripe' }, { title: 'Check' }]
+    },
+    length: {
+      name: 'Length',
+      values: [{ title: 'Regular' }, { title: 'Tall' }, { title: 'Short' }]
+    }
+  };
+
+  let optionState = [
+    { key: 'color', display: 'Image swatch', shown: true },
+    { key: 'size', display: 'Not shown', shown: false },
+    { key: 'material', display: 'Not shown', shown: false }
+  ];
+  const selectedValues = { color: 'Navy', size: 'S' };
+
+  const featureEnableBtn = document.getElementById('featureEnableBtn');
+  const customToggle = document.getElementById('quickFeatureToggle');
+  const variantSettings = document.getElementById('variantSettings');
+  const customOptionsWrap = document.getElementById('customOptionsWrap');
+  const optionTableBody = document.getElementById('optionTableBody');
+  const addOptionSelect = document.getElementById('addOptionSelect');
+  const addOptionBtn = document.getElementById('addOptionBtn');
+  const addOptionRow = document.getElementById('addOptionRow');
+  const addOptionEmpty = document.getElementById('addOptionEmpty');
+
+  function isFeatureOn(){
+    return featureEnableBtn.classList.contains('on');
+  }
+  function isCustomOn(){
+    return customToggle.classList.contains('on');
+  }
 
   function toggleCard(header){
     const body = header.parentElement.querySelector('.card-body');
@@ -620,18 +740,6 @@
     body.classList.toggle('collapsed');
     chev.classList.toggle('rot');
   }
-  function setDevice(mode){
-    const note = document.getElementById('deviceNote');
-    document.getElementById('btn-desktop').classList.toggle('active', mode==='desktop');
-    document.getElementById('btn-mobile').classList.toggle('active', mode==='mobile');
-    previewFrame.classList.remove('desktop','mobile');
-    previewFrame.classList.add(mode);
-    note.textContent = mode === 'desktop'
-      ? 'Desktop view — shows all enabled options.'
-      : 'Mobile view — shows all enabled options in a compact layout.';
-    updatePreview();
-  }
-
   function updateHoverSource(){
     const val = document.getElementById('hoverSourceSelect').value;
     const map = {
@@ -655,55 +763,173 @@
     });
   }
 
-  function updatePreview(){
-    const quickFeature = document.getElementById('quickFeatureToggle');
-    const featureEnabled = quickFeature ? quickFeature.classList.contains('on') : true;
-    const colorSet = document.querySelector('.preview-product .pv-set-label');
-    const colorSwatches = colorSet && colorSet.nextElementSibling;
-    const sizeSet = document.querySelector('.set-size-row');
-    const materialSet = document.querySelector('.set-material-row');
-    const rows = Array.from(document.querySelectorAll('.option-row'));
-    const enabledOptions = featureEnabled ? rows.filter(row => row.querySelector('.option-toggle')?.classList.contains('on')) : [];
-    const visibleOptions = enabledOptions;
-    const isVisible = option => visibleOptions.some(row => row.dataset.option === option);
-    reorderPreviewOptions(enabledOptions);
-    if(colorSet) colorSet.style.display = isVisible('color') ? '' : 'none';
-    if(colorSwatches) colorSwatches.style.display = isVisible('color') ? '' : 'none';
-    if(sizeSet) sizeSet.style.display = isVisible('size') ? '' : 'none';
-    if(materialSet) materialSet.style.display = isVisible('material') ? '' : 'none';
-    updateAvailability();
+  function displayChoices(selected){
+    return DISPLAY_OPTIONS.map(option => `<option${option === selected ? ' selected' : ''}>${option}</option>`).join('');
   }
 
-  function reorderPreviewOptions(enabledOptions){
-    const info = document.querySelector('.preview-info');
-    const addCart = document.querySelector('.add-cart');
-    if(!info || !addCart) return;
-    enabledOptions.forEach(optionRow => {
-      const group = info.querySelector(`.preview-option-group[data-preview-option="${optionRow.dataset.option}"]`);
-      if(group) info.insertBefore(group, addCart);
+  function renderOptionTable(){
+    optionTableBody.innerHTML = optionState.map((opt, index) => {
+      const meta = VARIANT_CATALOG[opt.key];
+      const count = meta.values.length;
+      return `<tr class="option-row" data-option="${opt.key}" draggable="true">
+        <td class="col-order">${index + 1}</td>
+        <td class="option-name"><b>${meta.name}</b><span>${count} value${count === 1 ? '' : 's'} detected</span></td>
+        <td class="col-display"><select class="option-display">${displayChoices(opt.display)}</select></td>
+        <td class="col-show"><div class="toggle option-toggle${opt.shown ? ' on' : ''}" role="switch" aria-checked="${opt.shown}"></div></td>
+        <td class="col-action"><button type="button" class="icon-btn remove-option" aria-label="Remove ${meta.name}">×</button></td>
+      </tr>`;
+    }).join('');
+
+    optionTableBody.querySelectorAll('.option-display').forEach(select => {
+      select.addEventListener('change', () => {
+        const key = select.closest('tr').dataset.option;
+        const opt = optionState.find(item => item.key === key);
+        opt.display = select.value;
+        opt.shown = select.value !== 'Not shown';
+        if(key === 'color' && select.value !== 'Not shown'){
+          const legacyDisplay = document.getElementById('displayTypeSelect');
+          if(legacyDisplay){
+            legacyDisplay.value = select.value === 'Image swatch' ? 'Image swatch' : 'Color swatch';
+          }
+        }
+        renderOptionTable();
+        refreshSettings();
+      });
     });
-    info.querySelectorAll('.preview-option-group').forEach(group => {
-      const isEnabled = enabledOptions.some(optionRow => optionRow.dataset.option === group.dataset.previewOption);
-      if(!isEnabled) info.insertBefore(group, addCart);
+
+    optionTableBody.querySelectorAll('.option-toggle').forEach(toggle => {
+      toggle.addEventListener('click', event => {
+        event.stopPropagation();
+        const key = toggle.closest('tr').dataset.option;
+        const opt = optionState.find(item => item.key === key);
+        opt.shown = !opt.shown;
+        if(!opt.shown) opt.display = 'Not shown';
+        else if(opt.display === 'Not shown') opt.display = VARIANT_CATALOG[key].values[0].image ? 'Image swatch' : 'Text button';
+        renderOptionTable();
+        refreshSettings();
+      });
     });
+
+    optionTableBody.querySelectorAll('.remove-option').forEach(button => {
+      button.addEventListener('click', () => {
+        const key = button.closest('tr').dataset.option;
+        optionState = optionState.filter(item => item.key !== key);
+        renderOptionTable();
+        renderAddDropdown();
+        refreshSettings();
+      });
+    });
+
+    optionTableBody.querySelectorAll('tr').forEach(enableOptionDrag);
+  }
+
+  function renderAddDropdown(){
+    const unused = Object.keys(VARIANT_CATALOG).filter(key => !optionState.some(item => item.key === key));
+    addOptionSelect.innerHTML = unused.length
+      ? `<option value="">Choose a variant</option>` + unused.map(key => `<option value="${key}">${VARIANT_CATALOG[key].name}</option>`).join('')
+      : `<option value="">No variants left</option>`;
+    addOptionBtn.disabled = unused.length === 0;
+    addOptionRow.hidden = unused.length === 0;
+    addOptionEmpty.hidden = unused.length !== 0;
+  }
+
+  function enableOptionDrag(row){
+    row.addEventListener('dragstart', event => {
+      event.dataTransfer.effectAllowed = 'move';
+      event.dataTransfer.setData('text/plain', row.dataset.option);
+      row.classList.add('drop-target');
+    });
+    row.addEventListener('dragend', () => row.classList.remove('drop-target'));
+    row.addEventListener('dragover', event => {
+      event.preventDefault();
+      event.dataTransfer.dropEffect = 'move';
+    });
+    row.addEventListener('drop', event => {
+      event.preventDefault();
+      const movingKey = event.dataTransfer.getData('text/plain');
+      const from = optionState.findIndex(item => item.key === movingKey);
+      const to = optionState.findIndex(item => item.key === row.dataset.option);
+      if(from < 0 || to < 0 || from === to) return;
+      const [moved] = optionState.splice(from, 1);
+      optionState.splice(to, 0, moved);
+      renderOptionTable();
+      refreshSettings();
+    });
+  }
+
+  function visibleOptions(){
+    if(!isFeatureOn() || !isCustomOn()) return [];
+    return optionState.filter(opt => opt.shown && opt.display !== 'Not shown');
+  }
+
+  function renderPreviewOptions(){
+    const host = document.getElementById('previewOptions');
+    host.innerHTML = '';
+    visibleOptions().forEach(opt => {
+      const meta = VARIANT_CATALOG[opt.key];
+      const group = document.createElement('div');
+      group.className = 'preview-option-group';
+      group.dataset.previewOption = opt.key;
+      const useSwatch = opt.display === 'Image swatch' || opt.display === 'Color swatch';
+      const row = document.createElement('div');
+      row.className = 'swatch-row';
+      if(useSwatch){
+        meta.values.forEach((value, index) => {
+          const swatch = document.createElement('div');
+          swatch.className = 'pswatch' + (opt.display === 'Image swatch' && value.image ? ' image' : '') + (value.extra ? ' extra' : '') + (selectedValues[opt.key] === value.title ? ' selected' : '');
+          swatch.title = value.title;
+          swatch.dataset.color = value.color || '#d8d3ca';
+          if(value.image) swatch.dataset.image = value.image;
+          if(opt.display === 'Image swatch' && value.image){
+            swatch.style.backgroundImage = `url('${value.image.replace('w=500', 'w=80')}')`;
+          } else {
+            swatch.style.backgroundColor = value.color || ['#1c2b3a','#8a1f1f','#d8d3ca','#2c2c2c','#5d4037','#7993a8'][index % 6];
+          }
+          swatch.addEventListener('click', () => {
+            selectedValues[opt.key] = value.title;
+            const image = document.querySelector('.preview-img img');
+            if(image && value.image) image.src = value.image;
+            renderPreviewOptions();
+            updateAvailability();
+          });
+          row.appendChild(swatch);
+        });
+        const extraCount = meta.values.filter(value => value.extra).length;
+        if(extraCount){
+          const badge = document.createElement('div');
+          badge.className = 'pswatch overflow';
+          badge.textContent = `+${extraCount}`;
+          row.appendChild(badge);
+        }
+      } else {
+        meta.values.forEach(value => {
+          const chip = document.createElement('div');
+          chip.className = 'textchip' + (selectedValues[opt.key] === value.title ? ' selected' : '');
+          chip.textContent = value.title;
+          chip.dataset.value = value.title;
+          chip.addEventListener('click', () => {
+            selectedValues[opt.key] = value.title;
+            renderPreviewOptions();
+            updateAvailability();
+          });
+          row.appendChild(chip);
+        });
+        const overflow = document.createElement('div');
+        overflow.className = 'textchip text-overflow';
+        row.appendChild(overflow);
+      }
+      group.innerHTML = `<div class="pv-set-label">${meta.name.toUpperCase()}</div>`;
+      group.appendChild(row);
+      host.appendChild(group);
+    });
+    updateSwatchShape();
+    updateOverflowMode();
   }
 
   function updateAvailability(){
-    const stockStyle = document.getElementById('quickStock')?.value || 'Grey out';
-    document.querySelectorAll('.preview-product .pswatch:not(.overflow)').forEach(swatch => {
-      const isUnavailable = false;
-      swatch.classList.toggle('unavailable', Boolean(isUnavailable));
-      swatch.style.display = isUnavailable && stockStyle === 'Hide' ? 'none' : '';
-      swatch.style.textDecoration = isUnavailable && stockStyle === 'Cross out' ? 'line-through' : '';
-    });
-    document.querySelectorAll('.preview-product .textchip[data-size]').forEach(chip => {
-      const isUnavailable = false;
-      chip.classList.toggle('unavailable', Boolean(isUnavailable));
-      chip.style.display = isUnavailable && stockStyle === 'Hide' ? 'none' : '';
-      chip.style.textDecoration = isUnavailable && stockStyle === 'Cross out' ? 'line-through' : '';
-    });
     const note = document.getElementById('selectionNote');
-    if(note) note.textContent = `Selected: ${selectedColor} / ${selectedSize}`;
+    const shown = visibleOptions().map(opt => selectedValues[opt.key] || VARIANT_CATALOG[opt.key].values[0].title);
+    if(note) note.textContent = shown.length ? `Selected: ${shown.join(' / ')}` : 'Variant options are hidden on this card.';
   }
 
   function updateDisplayType(){
@@ -711,16 +937,6 @@
     const sourceRow = document.getElementById('imageSourceRow');
     const imageMode = displayType && displayType.value === 'Image swatch';
     if(sourceRow) sourceRow.style.display = imageMode ? '' : 'none';
-    document.querySelectorAll('.preview-product .pswatch:not(.overflow)').forEach(swatch => {
-      swatch.classList.toggle('image', imageMode);
-      if(imageMode){
-        swatch.style.backgroundImage = `url('${swatch.dataset.image}')`;
-        swatch.style.backgroundColor = '';
-      } else {
-        swatch.style.backgroundImage = '';
-        swatch.style.backgroundColor = swatch.dataset.color || '#d8d3ca';
-      }
-    });
   }
 
   function updateSwatchShape(){
@@ -745,10 +961,10 @@
   }
 
   function fitTextOverflowRows(){
-    document.querySelectorAll('.set-size-row .swatch-row, .set-material-row .swatch-row').forEach(row => {
+    document.querySelectorAll('.preview-option-group .swatch-row').forEach(row => {
       const values = Array.from(row.querySelectorAll('.textchip:not(.text-overflow)'));
       const badge = row.querySelector('.text-overflow');
-      if(!badge) return;
+      if(!badge || !values.length) return;
       values.forEach(value => value.classList.remove('hidden-overflow'));
       badge.style.display = 'none';
       if(!row.classList.contains('single-line-overflow')) return;
@@ -763,28 +979,62 @@
     });
   }
 
-  function setToggle(toggle, enabled){
-    if(toggle.classList.contains('disabled')) return;
-    toggle.classList.toggle('on', enabled === undefined ? !toggle.classList.contains('on') : enabled);
-    updatePreview();
-    updateQuickNote();
-  }
-
   function updateQuickNote(){
-    const enabled = Array.from(document.querySelectorAll('.option-row')).filter(row => row.querySelector('.option-toggle')?.classList.contains('on'));
-    const names = enabled.map(row => row.querySelector('.option-name b').textContent);
     const note = document.getElementById('quickNote');
-    if(note) note.textContent = names.length
+    if(!note) return;
+    if(!isFeatureOn()){
+      note.textContent = 'Product card variants is off. Enable it to show options on the card.';
+      return;
+    }
+    if(!isCustomOn()){
+      note.textContent = 'Enable custom to choose which variants appear on the product card.';
+      return;
+    }
+    const names = visibleOptions().map(opt => VARIANT_CATALOG[opt.key].name);
+    note.textContent = names.length
       ? `${names.join(' and ')} ${names.length === 1 ? 'is' : 'are'} shown on the product card. Other options remain available on the product page.`
       : 'No options are shown on the product card. Customers can choose them on the product page.';
   }
 
-  document.querySelectorAll('.toggle').forEach(toggle => {
+  function refreshSettings(){
+    variantSettings.hidden = !isFeatureOn();
+    customOptionsWrap.hidden = !isFeatureOn() || !isCustomOn();
+    featureEnableBtn.textContent = isFeatureOn() ? 'Enabled' : 'Enable';
+    featureEnableBtn.setAttribute('aria-pressed', String(isFeatureOn()));
+    customToggle.setAttribute('aria-checked', String(isCustomOn()));
+    renderPreviewOptions();
+    updateQuickNote();
+    updateAvailability();
+  }
+
+  featureEnableBtn.addEventListener('click', () => {
+    featureEnableBtn.classList.toggle('on');
+    refreshSettings();
+  });
+
+  customToggle.setAttribute('role', 'switch');
+  customToggle.addEventListener('click', event => {
+    event.stopPropagation();
+    customToggle.classList.toggle('on');
+    refreshSettings();
+  });
+
+  addOptionBtn.addEventListener('click', () => {
+    const key = addOptionSelect.value;
+    if(!key || optionState.some(item => item.key === key)) return;
+    const hasImage = VARIANT_CATALOG[key].values.some(value => value.image);
+    optionState.push({ key, display: hasImage ? 'Image swatch' : 'Text button', shown: true });
+    renderOptionTable();
+    renderAddDropdown();
+    refreshSettings();
+  });
+
+  document.querySelectorAll('.legacy-settings .toggle, .vset .toggle').forEach(toggle => {
     toggle.setAttribute('role', 'switch');
     toggle.setAttribute('aria-checked', toggle.classList.contains('on'));
     toggle.addEventListener('click', event => {
       event.stopPropagation();
-      setToggle(toggle);
+      toggle.classList.toggle('on');
       toggle.setAttribute('aria-checked', toggle.classList.contains('on'));
     });
   });
@@ -810,76 +1060,9 @@
     }));
   });
 
-  document.querySelectorAll('.option-display').forEach(select => select.addEventListener('change', () => {
-    const row = select.closest('.option-row');
-    const toggle = row.querySelector('.option-toggle');
-    setToggle(toggle, select.value !== 'Not shown');
-    if(row.dataset.option === 'color'){
-      const legacyDisplay = document.getElementById('displayTypeSelect');
-      if(legacyDisplay && select.value !== 'Not shown'){
-        legacyDisplay.value = select.value === 'Image swatch' ? 'Image swatch' : 'Color swatch';
-        updateDisplayType();
-      }
-    }
-  }));
-
-  document.getElementById('quickOverflow').addEventListener('change', event => {
-    updateOverflowMode();
-  });
+  document.getElementById('quickOverflow').addEventListener('change', updateOverflowMode);
   document.getElementById('quickStock').addEventListener('change', updateAvailability);
-
   document.getElementById('quickShape').addEventListener('change', updateSwatchShape);
-
-  function refreshOptionOrder(){
-    document.querySelectorAll('.option-row').forEach((row, index) => {
-      row.querySelector('.option-order').textContent = index + 1;
-    });
-  }
-
-  function enableOptionDrag(row){
-    row.draggable = true;
-    row.addEventListener('dragstart', event => {
-      event.dataTransfer.effectAllowed = 'move';
-      event.dataTransfer.setData('text/plain', row.dataset.option);
-      row.classList.add('drop-target');
-    });
-    row.addEventListener('dragend', () => row.classList.remove('drop-target'));
-    row.addEventListener('dragover', event => {
-      event.preventDefault();
-      event.dataTransfer.dropEffect = 'move';
-    });
-    row.addEventListener('drop', event => {
-      event.preventDefault();
-      const moving = document.querySelector(`.option-row[data-option="${event.dataTransfer.getData('text/plain')}"]`);
-      if(moving && moving !== row) row.parentElement.insertBefore(moving, row);
-      row.classList.remove('drop-target');
-      refreshOptionOrder();
-      updatePreview();
-    });
-  }
-
-  document.querySelectorAll('.option-row').forEach(enableOptionDrag);
-
-  document.querySelectorAll('.preview-product .pswatch:not(.overflow)').forEach(swatch => {
-    swatch.dataset.color = swatch.style.backgroundColor;
-    swatch.addEventListener('click', () => {
-      if(swatch.classList.contains('unavailable')) return;
-      document.querySelectorAll('.preview-product .pswatch').forEach(item => item.classList.remove('selected'));
-      swatch.classList.add('selected');
-      selectedColor = swatch.title;
-      const image = document.querySelector('.preview-img img');
-      if(image && swatch.dataset.image) image.src = swatch.dataset.image;
-      updateAvailability();
-    });
-  });
-
-  document.querySelectorAll('.preview-product .textchip[data-size]').forEach(chip => chip.addEventListener('click', () => {
-    if(chip.classList.contains('unavailable')) return;
-    document.querySelectorAll('.textchip[data-size]').forEach(item => item.classList.remove('selected'));
-    chip.classList.add('selected');
-    selectedSize = chip.dataset.size;
-    updateAvailability();
-  }));
 
   document.querySelectorAll('.vset').forEach(set => {
     set.draggable = true;
@@ -901,13 +1084,11 @@
     window.setTimeout(() => status.textContent = '', 2200);
   });
 
-  updatePreview();
+  renderOptionTable();
+  renderAddDropdown();
+  refreshSettings();
   updateDisplayType();
-  updateSwatchShape();
-  updateOverflowMode();
   window.addEventListener('resize', fitTextOverflowRows);
-  updateQuickNote();
-  updateAvailability();
 </script>
 
 </body>
