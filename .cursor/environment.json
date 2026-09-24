@@ -6,11 +6,12 @@
       "port": 8080
     }
   ],
+  "start": "pgrep -f 'http.server 8080' >/dev/null 2>&1 || (cd /workspace && nohup python3 -m http.server 8080 >/tmp/static-server.log 2>&1 &); sleep 1; curl -fsS -o /dev/null http://localhost:8080/ && echo 'static-server ready on http://localhost:8080/'",
   "terminals": [
     {
-      "name": "static-server",
-      "command": "python3 -m http.server 8080",
-      "description": "Serves the static Findter mockup site. Open http://localhost:8080/ (redirects to the Product Card Variant mockup)."
+      "name": "static-server-logs",
+      "command": "cd /workspace && (pgrep -f 'http.server 8080' >/dev/null 2>&1 && echo 'static server already running (started by start command); tailing logs' && tail -n +1 -F /tmp/static-server.log) || python3 -m http.server 8080",
+      "description": "Static Findter mockup server on http://localhost:8080/ (root redirects to the Product Card Variant mockup). Tails the server log if the start command already launched it, otherwise runs the server in the foreground."
     }
   ]
 }
