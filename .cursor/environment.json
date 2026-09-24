@@ -1,0 +1,17 @@
+{
+  "name": "Findter Mockup",
+  "ports": [
+    {
+      "name": "static web server",
+      "port": 8080
+    }
+  ],
+  "start": "cd /workspace && (pgrep -f 'http.server 8080' >/dev/null 2>&1 || (nohup python3 -m http.server 8080 >/tmp/static-server.log 2>&1 &)); for i in $(seq 1 15); do curl -fsS -o /dev/null http://localhost:8080/ && { echo 'static-server ready on http://localhost:8080/'; exit 0; }; sleep 1; done; echo 'static-server failed to become ready' >&2; exit 1",
+  "terminals": [
+    {
+      "name": "static-server-logs",
+      "command": "cd /workspace && (pgrep -f 'http.server 8080' >/dev/null 2>&1 && echo 'static server already running (started by start command); tailing logs' && touch /tmp/static-server.log && tail -n +1 -F /tmp/static-server.log) || python3 -m http.server 8080",
+      "description": "Static Findter mockup server on http://localhost:8080/ (root redirects to the Product Card Variant mockup). Tails the server log if the start command already launched it; otherwise runs the server in the foreground."
+    }
+  ]
+}
