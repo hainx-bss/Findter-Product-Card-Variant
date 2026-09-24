@@ -1,0 +1,16 @@
+{
+  "name": "Findter Mockup",
+  "ports": [
+    {
+      "name": "static web server",
+      "port": 8080
+    }
+  ],
+  "terminals": [
+    {
+      "name": "static-server",
+      "command": "python3 -m http.server 8080",
+      "description": "Serves the static Findter mockup site. Open http://localhost:8080/ (redirects to the Product Card Variant mockup)."
+    }
+  ]
+}
